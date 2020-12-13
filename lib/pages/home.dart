@@ -32,35 +32,60 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-
-              Container(
-                width: 85,
-                height: 92,
-                color: Color(0xffc4c4c4),
-                child: Text('00',
-                style: TextStyle(
-                    fontSize: 48,
-                    fontFamily: "Sans Serif",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    width: 85,
+                    height: 92,
+                    color: Color(0xffc4c4c4),
+                    child: Center(
+                      child: Text(
+                        '00',
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontFamily: "Sans Serif",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                textAlign: TextAlign.center,
-                
-                ),
-              ),      
-              Container(
-                width: 85,
-                height: 92,
-                color: Color(0xffc4c4c4),
-              ),
-              Container(
-                width: 85,
-                height: 92,
-                color: Color(0xffc4c4c4),
-              ),
-            ]),
+                  ),
+                  Container(
+                    width: 85,
+                    height: 92,
+                    color: Color(0xffc4c4c4),
+                    child: Center(
+                      child: Text(
+                        '00',
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontFamily: "Sans Serif",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 85,
+                    height: 92,
+                    color: Color(0xffc4c4c4),
+                    child: Center(
+                      child: Text(
+                        '00',
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontFamily: "Sans Serif",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ]),
             RaisedButton.icon(
               onPressed: () {},
               icon: Icon(Icons.timer),
