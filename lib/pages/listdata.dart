@@ -11,11 +11,13 @@ class _ListDataPageState extends State<ListDataPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         title: Text("Sleep Data"),
         centerTitle: true,
         leading: Container(),
       ),
+      body: Container(
+          margin: EdgeInsets.all(20), child: ListView(children: <Widget>[])),
     );
   }
 }

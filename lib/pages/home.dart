@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
           margin: EdgeInsets.all(20),
           child: ListView(children: <Widget>[
+            SizedBox(height: 120),
             SizedBox(
               width: 359,
               height: 71,
@@ -73,8 +74,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Text(":",
-                    style: TextStyle(fontSize: 48),),
+                  Text(
+                    ":",
+                    style: TextStyle(fontSize: 48),
+                  ),
                   Container(
                     width: 85,
                     height: 92,
@@ -93,6 +96,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ]),
+            SizedBox(height: 20),
             RaisedButton.icon(
               onPressed: () {},
               icon: Icon(Icons.timer),

@@ -7,3 +7,4 @@ part 'rating.dart';
 part 'mainmenu.dart';
 part 'mainpage.dart';
 part 'listdata.dart';
+part 'database.dart';
