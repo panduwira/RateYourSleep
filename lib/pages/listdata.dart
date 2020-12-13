@@ -10,8 +10,12 @@ class ListDataPage extends StatefulWidget {
 class _ListDataPageState extends State<ListDataPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-       
+    return Scaffold(
+       appBar: AppBar(
+        title: Text("Sleep Data"),
+        centerTitle: true,
+        leading: Container(),
+      ),
     );
   }
 }

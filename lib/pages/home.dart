@@ -8,7 +8,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
+  int hours = 0, minutes = 0, seconds = 0;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -40,16 +41,20 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xffc4c4c4),
                     child: Center(
                       child: Text(
-                        '00',
+                        hours.toString(),
                         style: TextStyle(
                           fontSize: 48,
                           fontFamily: "Sans Serif",
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w300,
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ),
+                  ),
+                  Text(
+                    ":",
+                    style: TextStyle(fontSize: 48),
                   ),
                   Container(
                     width: 85,
@@ -57,28 +62,30 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xffc4c4c4),
                     child: Center(
                       child: Text(
-                        '00',
+                        minutes.toString(),
                         style: TextStyle(
                           fontSize: 48,
                           fontFamily: "Sans Serif",
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w300,
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
+                  Text(":",
+                    style: TextStyle(fontSize: 48),),
                   Container(
                     width: 85,
                     height: 92,
                     color: Color(0xffc4c4c4),
                     child: Center(
                       child: Text(
-                        '00',
+                        seconds.toString(),
                         style: TextStyle(
                           fontSize: 48,
                           fontFamily: "Sans Serif",
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w300,
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.center,
@@ -90,6 +97,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {},
               icon: Icon(Icons.timer),
               label: Text("Start/Stop"),
+              color: Colors.black,
+              textColor: Colors.white,
             ),
           ])),
     );

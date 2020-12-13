@@ -34,8 +34,8 @@ class _MainMenuState extends State<MainMenu> {
         ],
         currentIndex: _selectedIndex,
         backgroundColor: Colors.black,
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemtapped,
           ),
     );
