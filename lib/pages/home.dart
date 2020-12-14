@@ -9,6 +9,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int hours = 0, minutes = 0, seconds = 0;
+  int secondsplus;
+
+  bool startStop = false;
+  static Timer time;
+  static const onesec = const Duration(seconds: 1);
+
+  void initState() {
+    super.initState();
+    if (time == null)
+      time = Timer.periodic(onesec, (Timer t) {
+        startTimer();
+      });
+  }
+
+  void startTimer() {
+    if (startStop) {
+      setState(() {
+        secondsplus = secondsplus + 1;
+        seconds = secondsplus % 60;
+        minutes = secondsplus ~/ 60 % 60;
+        hours = secondsplus ~/ (60 * 60) % 24;
+      });
+    }
+  }
+
+  void stopTimer() {}
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xffc4c4c4),
                     child: Center(
                       child: Text(
-                        hours.toString(),
+                        hours.toString().padLeft(2, "0"),
                         style: TextStyle(
                           fontSize: 48,
                           fontFamily: "Sans Serif",
@@ -63,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xffc4c4c4),
                     child: Center(
                       child: Text(
-                        minutes.toString(),
+                        minutes.toString().padLeft(2, "0"),
                         style: TextStyle(
                           fontSize: 48,
                           fontFamily: "Sans Serif",
@@ -84,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xffc4c4c4),
                     child: Center(
                       child: Text(
-                        seconds.toString(),
+                        seconds.toString().padLeft(2, "0"),
                         style: TextStyle(
                           fontSize: 48,
                           fontFamily: "Sans Serif",
@@ -98,9 +124,13 @@ class _HomePageState extends State<HomePage> {
                 ]),
             SizedBox(height: 20),
             RaisedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  startStop = !startStop;
+                });
+              },
               icon: Icon(Icons.timer),
-              label: Text("Start/Stop"),
+              label: Text(startStop ? 'Stop' : 'Start'),
               color: Colors.black,
               textColor: Colors.white,
             ),
