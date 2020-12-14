@@ -146,6 +146,9 @@ class _ListDataPageState extends State<ListDataPage> {
               ),
             ]),
             SizedBox(
+              height: 40,
+            ),
+            SizedBox(
               width: 318,
               height: 71,
               child: Text(
@@ -158,6 +161,7 @@ class _ListDataPageState extends State<ListDataPage> {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 156,
@@ -182,10 +186,6 @@ class _ListDataPageState extends State<ListDataPage> {
                     ),
                   ),
                 ),
-                
-                
-                
-                
                 SizedBox(
                   width: 30,
                   height: 40,
@@ -198,11 +198,10 @@ class _ListDataPageState extends State<ListDataPage> {
                     ),
                   ),
                 ),
-                
-                
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 156,
@@ -242,6 +241,7 @@ class _ListDataPageState extends State<ListDataPage> {
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 156,
@@ -280,7 +280,6 @@ class _ListDataPageState extends State<ListDataPage> {
                 )
               ],
             ),
-            RaisedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble), label: Text("Show Data"))
           ])),
     );
   }
