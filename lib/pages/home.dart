@@ -8,35 +8,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int hours = 0, minutes = 0, seconds = 0;
-  int secondsplus;
-
+  int secondsplus = 0;
   bool startStop = false;
-  static Timer time;
+  Timer time;
   static const onesec = const Duration(seconds: 1);
-
-  void initState() {
-    super.initState();
-    if (time == null)
-      time = Timer.periodic(onesec, (Timer t) {
-        startTimer();
-      });
-  }
+  
 
   void startTimer() {
     if (startStop) {
       setState(() {
         secondsplus = secondsplus + 1;
-        seconds = secondsplus % 60;
-        minutes = secondsplus ~/ 60 % 60;
-        hours = secondsplus ~/ (60 * 60) % 24;
       });
-    }
+    } 
   }
 
-  void stopTimer() {}
-
+  void stopTimer() {
+    if (startStop == false) {
+      setState(() {
+        time.cancel();
+        startTimer();
+      });
+    } 
+  }
+  @override
   Widget build(BuildContext context) {
+    if (time == null) {
+      time = Timer.periodic(onesec, (Timer t) {
+        startTimer();
+      });
+    } 
+    int seconds = 0;
+    int minutes = 0;
+    int hours = 0;
+    seconds = secondsplus % 60;
+    minutes = secondsplus ~/ 60;
+    hours = secondsplus ~/ (60 * 60);
     return Scaffold(
       appBar: AppBar(
         title: Text("Rate Your Sleep"),
