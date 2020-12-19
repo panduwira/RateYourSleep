@@ -10,7 +10,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
+    HomePage2(),
     ListDataPage(),
     DatabasePage()
   ];

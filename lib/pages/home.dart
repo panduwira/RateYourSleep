@@ -12,34 +12,52 @@ class _HomePageState extends State<HomePage> {
   bool startStop = false;
   Timer time;
   static const onesec = const Duration(seconds: 1);
-  
+  Stopwatch stopwatch = Stopwatch();
+  int seconds = 0;
+  int minutes = 0;
+  int hours = 0;
+
+  @override
+  void dispose() {
+    time.cancel();
+    super.dispose();
+  }
 
   void startTimer() {
     if (startStop) {
       setState(() {
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
         secondsplus = secondsplus + 1;
       });
-    } 
+    }
   }
 
   void stopTimer() {
-    if (startStop == false) {
+    if (!startStop) {
       setState(() {
         time.cancel();
-        startTimer();
+        time = null;
       });
-    } 
+    }
   }
+
   @override
   Widget build(BuildContext context) {
-    if (time == null) {
-      time = Timer.periodic(onesec, (Timer t) {
-        startTimer();
-      });
-    } 
     int seconds = 0;
     int minutes = 0;
     int hours = 0;
+    if (time == null) {
+      time = Timer.periodic(onesec, (Timer t) {
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        startTimer();
+      });
+    } else if (time != null) {
+        stopTimer();
+    }
     seconds = secondsplus % 60;
     minutes = secondsplus ~/ 60;
     hours = secondsplus ~/ (60 * 60);
@@ -131,8 +149,12 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
             RaisedButton.icon(
               onPressed: () {
+                time = null;
                 setState(() {
                   startStop = !startStop;
+                  hours = 0;
+                  minutes = 0;
+                  seconds = 0;
                 });
               },
               icon: Icon(Icons.timer),
