@@ -16,6 +16,14 @@ class _HomePage2State extends State<HomePage2> {
   int hours, minutes, seconds;
   Stopwatch stopwatch = Stopwatch();
   String time = "00:00:00";
+
+  static DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+  static DateFormat dateFormat2 = DateFormat("yyyy-MM-dd HH:mm:ss");
+  static DateTime getStartTime = DateTime.now();
+  static DateTime getStopTime = DateTime.now();
+  String startTimeFormat = dateFormat.format(getStartTime);
+  String stopTimeFormat = dateFormat2.format(getStopTime);
+  
   final onesec = const Duration(seconds: 1);
 
   @override
@@ -38,6 +46,13 @@ class _HomePage2State extends State<HomePage2> {
   void getFinalHours() {
     setState(() {
       hours = getHour();
+    });
+    callTime();
+  }
+
+    void getFinalMinutes() {
+    setState(() {
+      minutes = getMinutes();
     });
     callTime();
   }
@@ -65,12 +80,16 @@ class _HomePage2State extends State<HomePage2> {
   void timeStart() {
     setState(() {
       startTime = true;
+      getStartTime = DateTime.now();
     });
     stopwatch.start();
     callTime();
   }
 
   void timeStop() {
+    getStopTime = DateTime.now();
+    getFinalHours();
+    getFinalMinutes();
     stopwatch.stop();
   }
 
@@ -146,6 +165,7 @@ class _HomePage2State extends State<HomePage2> {
                       },
                     );
                     showDialog(
+                        barrierDismissible: false,
                         context: context,
                         builder: (_) => new AlertDialog(
                                 actions: [
@@ -160,6 +180,9 @@ class _HomePage2State extends State<HomePage2> {
                                           CrossAxisAlignment.stretch,
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
+                                        Text(startTimeFormat),
+                                        Text(stopTimeFormat),
+                                        Text(hours.toString() + " Hours " + minutes.toString() + " Minutes"),
                                         Text(time),
                                         Text("How's your sleep"),
                                         TextFormField(
