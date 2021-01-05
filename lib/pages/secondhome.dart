@@ -8,12 +8,13 @@ class HomePage2 extends StatefulWidget {
 }
 
 class _HomePage2State extends State<HomePage2> {
-  final ratingcontroller = TextEditingController();
+  final ratingcontroller = TextEditingController(text: ratingsleep.toString());
   bool startTime = false;
   bool stopTime = false;
   bool resetTime = false;
 
   int hours, minutes, seconds;
+  static var ratingsleep = 0;
   Stopwatch stopwatch = Stopwatch();
   String time = "00:00:00";
 
@@ -23,7 +24,7 @@ class _HomePage2State extends State<HomePage2> {
   static DateTime getStopTime = DateTime.now();
   String startTimeFormat = dateFormat.format(getStartTime);
   String stopTimeFormat = dateFormat2.format(getStopTime);
-  
+
   final onesec = const Duration(seconds: 1);
 
   @override
@@ -50,9 +51,16 @@ class _HomePage2State extends State<HomePage2> {
     callTime();
   }
 
-    void getFinalMinutes() {
+  void getFinalMinutes() {
     setState(() {
       minutes = getMinutes();
+    });
+    callTime();
+  }
+
+  void getFinalSeconds() {
+    setState(() {
+      seconds = getSeconds();
     });
     callTime();
   }
@@ -90,6 +98,7 @@ class _HomePage2State extends State<HomePage2> {
     getStopTime = DateTime.now();
     getFinalHours();
     getFinalMinutes();
+    getFinalSeconds();
     stopwatch.stop();
   }
 
@@ -104,6 +113,7 @@ class _HomePage2State extends State<HomePage2> {
         ratingcontroller.clear();
       });
     }
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Rate Your Sleep"),
@@ -121,7 +131,6 @@ class _HomePage2State extends State<HomePage2> {
                   "Sleep Timer",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    
                     fontSize: 48,
                   ),
                 ),
@@ -158,10 +167,41 @@ class _HomePage2State extends State<HomePage2> {
                   setState(() {
                     Widget okButton = FlatButton(
                       child: Text("OK"),
-                      onPressed: () {
+                      onPressed: () async {
+                        if (ratingcontroller.text == "") {
+                          Fluttertoast.showToast(
+                              msg: "Please rate your sleep :-)",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER_RIGHT,
+                              backgroundColor: Colors.black,
+                              textColor: Colors.yellow,
+                              fontSize: 16.0);
+                        } else {
+                          SleepTimer sleepTimer = SleepTimer("", time, hours,
+                              minutes, seconds, ratingcontroller.text);
+                          bool result = await SleepTimerServices.addTimer(sleepTimer);
+                          if (result == true){
+                            Fluttertoast.showToast(
+                              msg: "Your Sleep has been saved :-)",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER_RIGHT,
+                              backgroundColor: Colors.black,
+                              textColor: Colors.yellow,
+                              fontSize: 16.0);
+                            timeReset();
+                            clearForm();
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Failed :-)",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER_RIGHT,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.yellow,
+                              fontSize: 16.0);
+                          }
+                        }
                         Navigator.of(context).pop();
-                        timeReset();
-                        clearForm();
+                        
                       },
                     );
                     showDialog(
@@ -182,14 +222,20 @@ class _HomePage2State extends State<HomePage2> {
                                       children: <Widget>[
                                         Text(startTimeFormat),
                                         Text(stopTimeFormat),
-                                        Text(hours.toString() + " Hours " + minutes.toString() + " Minutes"),
+                                        Text(hours.toString() +
+                                            " Hours " +
+                                            minutes.toString() +
+                                            " Minutes"),
                                         Text(time),
                                         Text("How's your sleep"),
                                         TextFormField(
                                           controller: ratingcontroller,
                                           decoration: InputDecoration(
                                               border: OutlineInputBorder(),
-                                              contentPadding: new EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0)),
+                                              contentPadding:
+                                                  new EdgeInsets.symmetric(
+                                                      vertical: 5.0,
+                                                      horizontal: 2.0)),
                                         ),
                                         Text("/5")
                                       ]),
