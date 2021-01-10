@@ -16,7 +16,22 @@ class _HomePage2State extends State<HomePage2> {
   Stopwatch stopwatch = Stopwatch();
   String time = "00:00:00";
   double _rating;
+  String name;
+  User _auth = FirebaseAuth.instance.currentUser;
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("users");
 
+  void getUserUpdate() async {
+    userCollection.doc(_auth.uid).snapshots().listen((event) {
+      name = event.data()['name'];
+      setState(() {});
+    });
+  }
+
+  void initState() {
+    getUserUpdate();
+    super.initState();
+  }
 
   static DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
   static DateFormat dateFormat2 = DateFormat("yyyy-MM-dd HH:mm:ss");
@@ -109,8 +124,7 @@ class _HomePage2State extends State<HomePage2> {
   @override
   Widget build(BuildContext context) {
     void clearForm() {
-      setState(() {
-      });
+      setState(() {});
     }
 
     return Scaffold(
@@ -164,6 +178,20 @@ class _HomePage2State extends State<HomePage2> {
                 onPressed: () {
                   timeStop();
                   setState(() {
+                    Widget cancelButton = FlatButton(
+                      child: Text("Cancel"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        timeReset();
+                        Fluttertoast.showToast(
+                                msg: "Your Sleep has been unsaved",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.yellow,
+                                fontSize: 16.0);
+                      },
+                    );
                     Widget okButton = FlatButton(
                       child: Text("OK"),
                       onPressed: () async {
@@ -176,8 +204,15 @@ class _HomePage2State extends State<HomePage2> {
                               textColor: Colors.yellow,
                               fontSize: 16.0);
                         } else {
-                          SleepTimer sleepTimer = SleepTimer("", time, hours,
-                              minutes, seconds, _rating.toString());
+                          SleepTimer sleepTimer = SleepTimer(
+                            "",
+                            time,
+                            hours,
+                            minutes,
+                            seconds,
+                            _rating.toString(),
+                            name,
+                          );
                           bool result =
                               await SleepTimerServices.addTimer(sleepTimer);
                           if (result == true) {
@@ -208,9 +243,10 @@ class _HomePage2State extends State<HomePage2> {
                         context: context,
                         builder: (_) => new AlertDialog(
                                 actions: [
+                                  cancelButton,
                                   okButton,
                                 ],
-                                title: Text('Rate Your Sleep'),
+                                title: Text('Please Rate Your Sleep'),
                                 content: Container(
                                   child: Column(
                                       mainAxisAlignment:
@@ -219,16 +255,18 @@ class _HomePage2State extends State<HomePage2> {
                                           CrossAxisAlignment.stretch,
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
+                                        Text(startTimeFormat),
+                                        Text(stopTimeFormat),
                                         Text(hours.toString() +
                                             " Hours " +
                                             minutes.toString() +
                                             " Minutes"),
                                         Text(time),
                                         Text(
-                                          'How was Your Sleep?',
+                                          'How was Your Sleep, ' + name ??
+                                              '' + '?',
                                           style: TextStyle(fontSize: 30.0),
                                         ),
-                                        Text('Please Rate Your Sleep'),
                                         RatingBar.builder(
                                           itemCount: 5,
                                           initialRating: 3,

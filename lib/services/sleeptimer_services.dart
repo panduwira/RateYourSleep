@@ -18,6 +18,7 @@ class SleepTimerServices {
       'minutes': sleepTimer.minutes,
       'seconds': sleepTimer.seconds,
       'rating': sleepTimer.rating,
+      'username': sleepTimer.username,
     });
 
     if (productDoc.id != null) {
