@@ -32,9 +32,9 @@ class _MainMenuState extends State<MainMenu> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Timer'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.single_bed_sharp), label: 'Average'),
+              icon: Icon(Icons.single_bed_sharp), label: 'All data'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.chat_sharp), label: 'All data'),
+              icon: Icon(Icons.chat_sharp), label: 'Average'),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), label: 'My Account'),
         ],

@@ -20,7 +20,8 @@ class TimeDataCard extends StatelessWidget {
 
         title: Text(sleeptimer.rating),
         subtitle: Text(sleeptimer.sleeptime),
-        leading: Container()
+        leading: Icon(Icons.star),
+        
       ),
     );
   }

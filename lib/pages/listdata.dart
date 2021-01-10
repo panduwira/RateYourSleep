@@ -8,279 +8,79 @@ class ListDataPage extends StatefulWidget {
 }
 
 class _ListDataPageState extends State<ListDataPage> {
+  static String name;
+  bool isLoading = false;
+  User _auth = FirebaseAuth.instance.currentUser;
+    CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("users");
+  CollectionReference productCollection =
+      FirebaseFirestore.instance.collection("timer");
+  //UserServices.userCollection.where("name", isEqualTo: name.toString()));
+  //productCollection.where("user", isEqualTo: "unapproved");
+  
+  void getUserUpdate() async {
+    userCollection.doc(_auth.uid).snapshots().listen((event) {
+      name = event.data()['name'];
+      setState(() {});
+    });
+  }
+
+  void initState() {
+    getUserUpdate();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sleep Average"),
+        title: Text("All Average"),
         centerTitle: true,
         leading: Container(),
       ),
-      body: Container(
-          margin: EdgeInsets.all(20),
-          child: ListView(children: <Widget>[
-            SizedBox(
-              width: 318,
-              height: 71,
-              child: Text(
-                "Average Sleep Time",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 36,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 156,
-                  height: 40,
-                  child: Text(
-                    "Last 7 days",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 44,
-                  height: 40,
-                  child: Text(
-                    "0.0",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 100,
-                  height: 40,
-                  child: Text(
-                    "hours",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(
-                width: 156,
-                height: 40,
-                child: Text(
-                  "Last 30 days",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 44,
-                height: 40,
-                child: Text(
-                  "0.0",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 100,
-                height: 40,
-                child: Text(
-                  "hours",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(
-                width: 156,
-                height: 40,
-                child: Text(
-                  "All Time",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 44,
-                height: 40,
-                child: Text(
-                  "0.0",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 100,
-                height: 40,
-                child: Text(
-                  "hours",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-            ]),
-            SizedBox(
-              height: 40,
-            ),
-            SizedBox(
-              width: 318,
-              height: 71,
-              child: Text(
-                "Average Rating",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 36,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 156,
-                  height: 40,
-                  child: Text(
-                    "Last 7 days",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 44,
-                  height: 40,
-                  child: Text(
-                    "0.0",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                  height: 40,
-                  child: Text(
-                    "/ 5",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 156,
-                  height: 40,
-                  child: Text(
-                    "Last 30 days",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 44,
-                  height: 40,
-                  child: Text(
-                    "0.0",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                  height: 40,
-                  child: Text(
-                    "/ 5",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 156,
-                  height: 40,
-                  child: Text(
-                    "All time",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 44,
-                  height: 40,
-                  child: Text(
-                    "0.0",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                  height: 40,
-                  child: Text(
-                    "/ 5",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ])),
+      body: Stack(children: [
+        Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: StreamBuilder<QuerySnapshot>(
+              stream: productCollection.where('username', isEqualTo : name).snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Failed to get products data!");
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SpinKitFadingCircle(
+                    size: 50,
+                    color: Colors.blue,
+                  );
+                }
+
+                return ListView(
+                  children: snapshot.data.docs.map((DocumentSnapshot doc) {
+                    return TimeDataCard(
+                      sleeptimer: SleepTimer(
+                        doc.data()['id'],
+                        doc.data()['sleeptime'],
+                        doc.data()['hours'],
+                        doc.data()['minutes'],
+                        doc.data()['seconds'],
+                        doc.data()['rating'],
+                        doc.data()['username'],
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            )),
+        isLoading == true
+            ? Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.transparent,
+                child: SpinKitCircle(size: 50, color: Colors.blue))
+            : Container()
+      ]),
     );
   }
 }
