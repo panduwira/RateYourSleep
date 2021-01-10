@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:rateyoursleep/services/services.dart';
 import 'package:rateyoursleep/models/models.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_picker/image_picker.dart';
+
+part 'signin_page.dart';
+part 'signup_page.dart';
 part 'home.dart';
 part 'rating.dart';
 part 'mainmenu.dart';
