@@ -8,15 +8,15 @@ class HomePage2 extends StatefulWidget {
 }
 
 class _HomePage2State extends State<HomePage2> {
-  final ratingcontroller = TextEditingController(text: ratingsleep.toString());
   bool startTime = false;
   bool stopTime = false;
   bool resetTime = false;
 
   int hours, minutes, seconds;
-  static var ratingsleep = 0;
   Stopwatch stopwatch = Stopwatch();
   String time = "00:00:00";
+  double _rating;
+
 
   static DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
   static DateFormat dateFormat2 = DateFormat("yyyy-MM-dd HH:mm:ss");
@@ -110,7 +110,6 @@ class _HomePage2State extends State<HomePage2> {
   Widget build(BuildContext context) {
     void clearForm() {
       setState(() {
-        ratingcontroller.clear();
       });
     }
 
@@ -168,7 +167,7 @@ class _HomePage2State extends State<HomePage2> {
                     Widget okButton = FlatButton(
                       child: Text("OK"),
                       onPressed: () async {
-                        if (ratingcontroller.text == "") {
+                        if (_rating == 0) {
                           Fluttertoast.showToast(
                               msg: "Please rate your sleep :-)",
                               toastLength: Toast.LENGTH_SHORT,
@@ -178,30 +177,30 @@ class _HomePage2State extends State<HomePage2> {
                               fontSize: 16.0);
                         } else {
                           SleepTimer sleepTimer = SleepTimer("", time, hours,
-                              minutes, seconds, ratingcontroller.text);
-                          bool result = await SleepTimerServices.addTimer(sleepTimer);
-                          if (result == true){
+                              minutes, seconds, _rating.toString());
+                          bool result =
+                              await SleepTimerServices.addTimer(sleepTimer);
+                          if (result == true) {
                             Fluttertoast.showToast(
-                              msg: "Your Sleep has been saved :-)",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER_RIGHT,
-                              backgroundColor: Colors.black,
-                              textColor: Colors.yellow,
-                              fontSize: 16.0);
+                                msg: "Your Sleep has been saved :-)",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.black,
+                                textColor: Colors.yellow,
+                                fontSize: 16.0);
                             timeReset();
                             clearForm();
                           } else {
                             Fluttertoast.showToast(
-                              msg: "Failed :-)",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER_RIGHT,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.yellow,
-                              fontSize: 16.0);
+                                msg: "Failed :-)",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.yellow,
+                                fontSize: 16.0);
                           }
                         }
                         Navigator.of(context).pop();
-                        
                       },
                     );
                     showDialog(
@@ -220,24 +219,39 @@ class _HomePage2State extends State<HomePage2> {
                                           CrossAxisAlignment.stretch,
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
-                                        Text(startTimeFormat),
-                                        Text(stopTimeFormat),
                                         Text(hours.toString() +
                                             " Hours " +
                                             minutes.toString() +
                                             " Minutes"),
                                         Text(time),
-                                        Text("How's your sleep"),
-                                        TextFormField(
-                                          controller: ratingcontroller,
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(),
-                                              contentPadding:
-                                                  new EdgeInsets.symmetric(
-                                                      vertical: 5.0,
-                                                      horizontal: 2.0)),
+                                        Text(
+                                          'How was Your Sleep?',
+                                          style: TextStyle(fontSize: 30.0),
                                         ),
-                                        Text("/5")
+                                        Text('Please Rate Your Sleep'),
+                                        RatingBar.builder(
+                                          itemCount: 5,
+                                          initialRating: 3,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          itemBuilder: (context, _) => Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (rating) {
+                                            setState(() {
+                                              _rating = rating;
+                                            });
+                                          },
+                                        ),
+                                        _rating != null
+                                            ? Text(
+                                                'Rating: $_rating',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            : Container(),
                                       ]),
                                 )));
                   });

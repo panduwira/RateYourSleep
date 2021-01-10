@@ -12,7 +12,8 @@ class _MainMenuState extends State<MainMenu> {
   static List<Widget> _widgetOptions = <Widget>[
     HomePage2(),
     ListDataPage(),
-    DatabasePage()
+    DatabasePage(),
+    AccountPage()
   ];
 
   void _onItemtapped(int index) {
@@ -34,6 +35,8 @@ class _MainMenuState extends State<MainMenu> {
               icon: Icon(Icons.single_bed_sharp), label: 'Average'),
           BottomNavigationBarItem(
               icon: Icon(Icons.chat_sharp), label: 'All data'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), label: 'My Account'),
         ],
         currentIndex: _selectedIndex,
         backgroundColor: Colors.black,

@@ -4,6 +4,8 @@ class AuthServices {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static Reference ref;
   static UploadTask uploadTask;
+  static final firestore = FirebaseFirestore.instance; 
+  final CollectionReference users = firestore.collection('user');
 
   static Future<String> signUp(
       String email, String password, String name) async {
