@@ -34,11 +34,13 @@ class _HomePage2State extends State<HomePage2> {
   }
 
   static DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-  static DateFormat dateFormat2 = DateFormat("yyyy-MM-dd HH:mm:ss");
-  static DateTime getStartTime = DateTime.now();
-  static DateTime getStopTime = DateTime.now();
+  static Timestamp timestamp = Timestamp.now();
+  static DateTime getStartTime =
+      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+  static DateTime getStopTime =
+      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
   String startTimeFormat = dateFormat.format(getStartTime);
-  String stopTimeFormat = dateFormat2.format(getStopTime);
+  String stopTimeFormat = dateFormat.format(getStopTime);
 
   final onesec = const Duration(seconds: 1);
 
@@ -103,14 +105,17 @@ class _HomePage2State extends State<HomePage2> {
   void timeStart() {
     setState(() {
       startTime = true;
-      getStartTime = DateTime.now();
+      getStartTime = new DateTime.now();
     });
+
+    startTimeFormat = dateFormat.format(getStartTime);
     stopwatch.start();
     callTime();
   }
 
   void timeStop() {
-    getStopTime = DateTime.now();
+    getStopTime = new DateTime.now();
+    stopTimeFormat = dateFormat.format(getStopTime);
     getFinalHours();
     getFinalMinutes();
     getFinalSeconds();
@@ -167,7 +172,24 @@ class _HomePage2State extends State<HomePage2> {
               ),
               RaisedButton.icon(
                 onPressed: () {
-                  timeStart();
+                  if (time != "00:00:00") {
+                    Fluttertoast.showToast(
+                        msg: "You're Time is stll running",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER_RIGHT,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.yellow,
+                        fontSize: 16.0);
+                  } else {
+                    timeStart();
+                    Fluttertoast.showToast(
+                        msg: "Your Sleep has been started",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER_RIGHT,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.yellow,
+                        fontSize: 16.0);
+                  }
                 },
                 icon: Icon(Icons.timer),
                 label: Text('Sleep'),
@@ -176,123 +198,131 @@ class _HomePage2State extends State<HomePage2> {
               ),
               RaisedButton.icon(
                 onPressed: () {
-                  timeStop();
-                  setState(() {
-                    Widget cancelButton = FlatButton(
-                      child: Text("Cancel"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        timeReset();
-                        Fluttertoast.showToast(
-                                msg: "Your Sleep has been unsaved",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER_RIGHT,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.yellow,
-                                fontSize: 16.0);
-                      },
-                    );
-                    Widget okButton = FlatButton(
-                      child: Text("OK"),
-                      onPressed: () async {
-                        if (_rating == 0) {
+                  if (time == "00:00:00") {
+                    Fluttertoast.showToast(
+                        msg: "You're not yet to start your sleep timer",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER_RIGHT,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.yellow,
+                        fontSize: 16.0);
+                  } else {
+                    timeStop();
+                    setState(() {
+                      Widget cancelButton = FlatButton(
+                        child: Text("Cancel"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          timeReset();
                           Fluttertoast.showToast(
-                              msg: "Please rate your sleep :-)",
+                              msg: "Your Sleep has been unsaved",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER_RIGHT,
-                              backgroundColor: Colors.black,
+                              backgroundColor: Colors.red,
                               textColor: Colors.yellow,
                               fontSize: 16.0);
-                        } else {
-                          SleepTimer sleepTimer = SleepTimer(
-                            "",
-                            time,
-                            hours,
-                            minutes,
-                            seconds,
-                            _rating.toString(),
-                            name,
-                          );
-                          bool result =
-                              await SleepTimerServices.addTimer(sleepTimer);
-                          if (result == true) {
+                        },
+                      );
+                      Widget okButton = FlatButton(
+                        child: Text("OK"),
+                        onPressed: () async {
+                          if (_rating == 0) {
                             Fluttertoast.showToast(
-                                msg: "Your Sleep has been saved :-)",
+                                msg: "Please rate your sleep :-)",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER_RIGHT,
                                 backgroundColor: Colors.black,
                                 textColor: Colors.yellow,
                                 fontSize: 16.0);
-                            timeReset();
-                            clearForm();
                           } else {
-                            Fluttertoast.showToast(
-                                msg: "Failed :-)",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER_RIGHT,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.yellow,
-                                fontSize: 16.0);
+                            SleepTimer sleepTimer = SleepTimer(
+                              "",
+                              time,
+                              hours,
+                              minutes,
+                              seconds,
+                              _rating.toString(),
+                              name,
+                            );
+                            bool result =
+                                await SleepTimerServices.addTimer(sleepTimer);
+                            if (result == true) {
+                              Fluttertoast.showToast(
+                                  msg: "Your Sleep has been saved :-)",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER_RIGHT,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.yellow,
+                                  fontSize: 16.0);
+                              timeReset();
+                              clearForm();
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Failed :-)",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER_RIGHT,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.yellow,
+                                  fontSize: 16.0);
+                            }
                           }
-                        }
-                        Navigator.of(context).pop();
-                      },
-                    );
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (_) => new AlertDialog(
-                                actions: [
-                                  cancelButton,
-                                  okButton,
-                                ],
-                                title: Text('Please Rate Your Sleep'),
-                                content: Container(
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Text(startTimeFormat),
-                                        Text(stopTimeFormat),
-                                        Text(hours.toString() +
-                                            " Hours " +
-                                            minutes.toString() +
-                                            " Minutes"),
-                                        Text(time),
-                                        Text(
-                                          'How was Your Sleep, ' + name ??
-                                              '' + '?',
-                                          style: TextStyle(fontSize: 30.0),
-                                        ),
-                                        RatingBar.builder(
-                                          itemCount: 5,
-                                          initialRating: 3,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: true,
-                                          itemBuilder: (context, _) => Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (_) => new AlertDialog(
+                                  actions: [
+                                    cancelButton,
+                                    okButton,
+                                  ],
+                                  title: Text('How was Your Sleep, ' + name ??
+                                                '' + '?', style: TextStyle(fontSize: 30.0),),
+                                  content: Container(
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(startTimeFormat),
+                                          Text(stopTimeFormat),
+                                          Text(hours.toString() +
+                                              " Hours " +
+                                              minutes.toString() +
+                                              " Minutes"),
+                                          Text(time),
+                                          RatingBar.builder(
+                                            itemCount: 5,
+                                            initialRating: 3,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemBuilder: (context, _) => Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              setState(() {
+                                                this._rating = rating;
+                                              });
+                                            },
                                           ),
-                                          onRatingUpdate: (rating) {
-                                            setState(() {
-                                              _rating = rating;
-                                            });
-                                          },
-                                        ),
-                                        _rating != null
-                                            ? Text(
-                                                'Rating: $_rating',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            : Container(),
-                                      ]),
-                                )));
-                  });
+                                          Text(_rating.toString()),
+                                          _rating != null
+                                              ? Text(
+                                                  'Rating: ' +
+                                                      _rating.toString(),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              : Container(),
+                                        ]),
+                                  )));
+                    });
+                  }
                 },
                 icon: Icon(Icons.timer),
                 label: Text('Wake Up'),
