@@ -1,4 +1,4 @@
-package com.example.rateyoursleep
+package com.koalaproduction.rateyoursleep
 
 import io.flutter.embedding.android.FlutterActivity
 
