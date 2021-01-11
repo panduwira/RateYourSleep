@@ -33,7 +33,7 @@ class _ListDataPageState extends State<ListDataPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Average"),
+        title: Text("$name" + " Data"),
         centerTitle: true,
         leading: Container(),
       ),

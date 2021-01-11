@@ -153,6 +153,7 @@ class _HomePage2State extends State<HomePage2> {
                   ),
                 ),
               ),
+              SizedBox(height: 50),
               Container(
                 width: 85,
                 height: 92,
@@ -170,166 +171,170 @@ class _HomePage2State extends State<HomePage2> {
                   ),
                 ),
               ),
-              RaisedButton.icon(
-                onPressed: () {
-                  if (time != "00:00:00") {
-                    Fluttertoast.showToast(
-                        msg: "You're Time is stll running",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER_RIGHT,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.yellow,
-                        fontSize: 16.0);
-                  } else {
-                    timeStart();
-                    Fluttertoast.showToast(
-                        msg: "Your Sleep has been started",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER_RIGHT,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.yellow,
-                        fontSize: 16.0);
-                  }
-                },
-                icon: Icon(Icons.timer),
-                label: Text('Sleep'),
-                color: Colors.black,
-                textColor: Colors.white,
-              ),
-              RaisedButton.icon(
-                onPressed: () {
-                  if (time == "00:00:00") {
-                    Fluttertoast.showToast(
-                        msg: "You're not yet to start your sleep timer",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER_RIGHT,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.yellow,
-                        fontSize: 16.0);
-                  } else {
-                    timeStop();
-                    setState(() {
-                      Widget cancelButton = FlatButton(
-                        child: Text("Cancel"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          timeReset();
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  MaterialButton(
+                      shape: CircleBorder(),
+                      onPressed: () {
+                        if (time != "00:00:00") {
                           Fluttertoast.showToast(
-                              msg: "Your Sleep has been unsaved",
+                              msg: "You're Time is stll running",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER_RIGHT,
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.black,
                               textColor: Colors.yellow,
                               fontSize: 16.0);
-                        },
-                      );
-                      Widget okButton = FlatButton(
-                        child: Text("OK"),
-                        onPressed: () async {
-                          if (_rating == 0) {
-                            Fluttertoast.showToast(
-                                msg: "Please rate your sleep :-)",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER_RIGHT,
-                                backgroundColor: Colors.black,
-                                textColor: Colors.yellow,
-                                fontSize: 16.0);
-                          } else {
-                            SleepTimer sleepTimer = SleepTimer(
-                              "",
-                              time,
-                              hours,
-                              minutes,
-                              seconds,
-                              _rating.toString(),
-                              name,
-                              startTimeFormat,
-                              stopTimeFormat
+                        } else {
+                          timeStart();
+                          Fluttertoast.showToast(
+                              msg: "Your Sleep has been started",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER_RIGHT,
+                              backgroundColor: Colors.black,
+                              textColor: Colors.yellow,
+                              fontSize: 16.0);
+                        }
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Icon(
+                            Icons.single_bed_sharp,
+                            size: 48,
+                          ))),
+                  MaterialButton(
+                      shape: CircleBorder(),
+                      onPressed: () {
+                        if (time == "00:00:00") {
+                          Fluttertoast.showToast(
+                              msg: "You're not yet to start your sleep timer",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER_RIGHT,
+                              backgroundColor: Colors.black,
+                              textColor: Colors.yellow,
+                              fontSize: 16.0);
+                        } else {
+                          timeStop();
+                          setState(() {
+                            Widget cancelButton = FlatButton(
+                              child: Text("Cancel"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                timeReset();
+                                Fluttertoast.showToast(
+                                    msg: "Your Sleep has been unsaved",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER_RIGHT,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.yellow,
+                                    fontSize: 16.0);
+                              },
                             );
-                            bool result =
-                                await SleepTimerServices.addTimer(sleepTimer);
-                            if (result == true) {
-                              Fluttertoast.showToast(
-                                  msg: "Your Sleep has been saved :-)",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER_RIGHT,
-                                  backgroundColor: Colors.black,
-                                  textColor: Colors.yellow,
-                                  fontSize: 16.0);
-                              timeReset();
-                              clearForm();
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: "Failed :-)",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER_RIGHT,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.yellow,
-                                  fontSize: 16.0);
-                            }
-                          }
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (_) => new AlertDialog(
-                                  actions: [
-                                    cancelButton,
-                                    okButton,
-                                  ],
-                                  title: Text('How was Your Sleep, ' + name ??
-                                                '' + '?', style: TextStyle(fontSize: 30.0),),
-                                  content: Container(
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Text(startTimeFormat),
-                                          Text(stopTimeFormat),
-                                          Text(hours.toString() +
-                                              " Hours " +
-                                              minutes.toString() +
-                                              " Minutes"),
-                                          Text(time),
-                                          RatingBar.builder(
-                                            itemCount: 5,
-                                            initialRating: 3,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ),
-                                            onRatingUpdate: (rating) {
-                                              setState(() {
-                                                _rating = rating;
-                                              });
-                                            },
-                                          ),
-                                          Text(_rating.toString()),
-                                          _rating != null
-                                              ? Text(
-                                                  'Rating: ' +
-                                                      _rating.toString(),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
-                                              : Container(),
-                                        ]),
-                                  )));
-                    });
-                  }
-                },
-                icon: Icon(Icons.timer),
-                label: Text('Wake Up'),
-                color: Colors.blue,
-                textColor: Colors.white,
+                            Widget okButton = FlatButton(
+                              child: Text("OK"),
+                              onPressed: () async {
+                                if (_rating == 0) {
+                                  Fluttertoast.showToast(
+                                      msg: "Please rate your sleep :-)",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER_RIGHT,
+                                      backgroundColor: Colors.black,
+                                      textColor: Colors.yellow,
+                                      fontSize: 16.0);
+                                } else {
+                                  SleepTimer sleepTimer = SleepTimer(
+                                      "",
+                                      time,
+                                      hours,
+                                      minutes,
+                                      seconds,
+                                      _rating.toString(),
+                                      name,
+                                      startTimeFormat,
+                                      stopTimeFormat);
+                                  bool result =
+                                      await SleepTimerServices.addTimer(
+                                          sleepTimer);
+                                  if (result == true) {
+                                    Fluttertoast.showToast(
+                                        msg: "Your Sleep has been saved :-)",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER_RIGHT,
+                                        backgroundColor: Colors.black,
+                                        textColor: Colors.yellow,
+                                        fontSize: 16.0);
+                                    timeReset();
+                                    clearForm();
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Failed :-)",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER_RIGHT,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.yellow,
+                                        fontSize: 16.0);
+                                  }
+                                }
+                                Navigator.of(context).pop();
+                              },
+                            );
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (_) => new AlertDialog(
+                                        actions: [
+                                          cancelButton,
+                                          okButton,
+                                        ],
+                                        title: Text(
+                                          'How was Your Sleep, ' + name ??
+                                              '' + '?',
+                                          style: TextStyle(fontSize: 30.0),
+                                        ),
+                                        content: Container(
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text(startTimeFormat),
+                                                Text(stopTimeFormat),
+                                                Text(hours.toString() +
+                                                    " Hours " +
+                                                    minutes.toString() +
+                                                    " Minutes"),
+                                                Text(time),
+                                                RatingBar.builder(
+                                                  itemCount: 5,
+                                                  initialRating: 3,
+                                                  direction: Axis.horizontal,
+                                                  allowHalfRating: true,
+                                                  itemBuilder: (context, _) =>
+                                                      Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  ),
+                                                  onRatingUpdate: (rating) {
+                                                    setState(() {
+                                                      _rating = rating;
+                                                    });
+                                                  },
+                                                ),
+                                              ]),
+                                        )));
+                          });
+                        }
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Icon(
+                            Icons.stop,
+                            size: 48,
+                          ))),
+                ],
               ),
             ])));
   }
