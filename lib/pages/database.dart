@@ -8,6 +8,7 @@ class DatabasePage extends StatefulWidget {
 }
 
 class _DatabasePageState extends State<DatabasePage> {
+  CollectionReference timercollection = FirebaseFirestore.instance.collection('timer');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,44 +17,34 @@ class _DatabasePageState extends State<DatabasePage> {
         centerTitle: true,
         leading: Container(),
       ),
-      body: Container(
-          margin: EdgeInsets.all(20),
-          child: ListView(children: <Widget>[
-            Text(
-              "All Data",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-              ),
-            ),
-            SizedBox(height: 20),
-            Table(
-              border: TableBorder.all(width: 3, color: Colors.black),
-              children: [
-                TableRow(children: [
-                  Column(children: [Text('Date', style: TextStyle(fontSize: 20),)]),
-                  Column(children: [Text('Time', style: TextStyle(fontSize: 20),)]),
-                  Column(children: [Text('Rating', style: TextStyle(fontSize: 20),)]),
-                ]),
-                TableRow(children: [
-                  Column(children: [Text('1/1', style: TextStyle(fontSize: 16),)]),
-                  Column(children: [Text('04:20', style: TextStyle(fontSize: 16),)]),
-                  Column(children: [Text('3.5', style: TextStyle(fontSize: 16),)]),
-                ]),
-                TableRow(children: [
-                  Column(children: [Text('1/1', style: TextStyle(fontSize: 16),)]),
-                  Column(children: [Text('04:20', style: TextStyle(fontSize: 16),)]),
-                  Column(children: [Text('3.5', style: TextStyle(fontSize: 16),)]),
-                ]),
-                TableRow(children: [
-                  Column(children: [Text('1/1', style: TextStyle(fontSize: 16),)]),
-                  Column(children: [Text('04:20', style: TextStyle(fontSize: 16),)]),
-                  Column(children: [Text('3.5', style: TextStyle(fontSize: 16),)]),
-                ]),
-              ],
-            ),
-          ])),
-    );
+      body: Stack(
+          children: [
+            Container(
+            width: double.infinity,
+            height: double.infinity,
+            child:
+            StreamBuilder<QuerySnapshot>(
+                stream: timercollection.snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  final documents = snapshot.data.docs;
+                  final sum =
+                      documents.fold(0, (s, n) => s + int.parse(n['Value']));
+                  return ListView.builder(
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        final documentSnapshot = snapshot.data.docs[index];
+                        final value = int.parse(documentSnapshot['hours']);
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Document : $sum'),
+                        );
+                      });
+                }),
+          )
+          ])
+          );
+          
+    
   }
 }

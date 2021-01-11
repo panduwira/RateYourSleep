@@ -67,6 +67,8 @@ class _ListDataPageState extends State<ListDataPage> {
                         doc.data()['seconds'],
                         doc.data()['rating'],
                         doc.data()['username'],
+                        doc.data()['sleepdate'],
+                        doc.data()['wakeupdate'],
                       ),
                     );
                   }).toList(),

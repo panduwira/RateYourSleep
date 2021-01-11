@@ -12,8 +12,7 @@ class _MainMenuState extends State<MainMenu> {
   static List<Widget> _widgetOptions = <Widget>[
     HomePage2(),
     ListDataPage(),
-    DatabasePage(),
-    AccountPage()
+    AccountPage(),
   ];
 
   void _onItemtapped(int index) {
@@ -32,9 +31,7 @@ class _MainMenuState extends State<MainMenu> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Timer'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.single_bed_sharp), label: 'All data'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.chat_sharp), label: 'Average'),
+              icon: Icon(Icons.single_bed_sharp), label: 'My data'),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), label: 'My Account'),
         ],

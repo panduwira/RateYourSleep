@@ -243,6 +243,8 @@ class _HomePage2State extends State<HomePage2> {
                               seconds,
                               _rating.toString(),
                               name,
+                              startTimeFormat,
+                              stopTimeFormat
                             );
                             bool result =
                                 await SleepTimerServices.addTimer(sleepTimer);
@@ -305,7 +307,7 @@ class _HomePage2State extends State<HomePage2> {
                                             ),
                                             onRatingUpdate: (rating) {
                                               setState(() {
-                                                this._rating = rating;
+                                                _rating = rating;
                                               });
                                             },
                                           ),

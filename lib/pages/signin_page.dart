@@ -22,6 +22,11 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+          brightness: Brightness.light, primaryColor: Colors.red[600]),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, primaryColor: Colors.red[400]),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
