@@ -1,7 +1,5 @@
-import 'package:flutter/semantics.dart';
 import 'package:rateyoursleep/models/models.dart';
 import 'package:rateyoursleep/services/services.dart';
-import 'package:rateyoursleep/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -9,26 +7,38 @@ class TimeDataCard extends StatelessWidget {
   final SleepTimer sleeptimer;
   const TimeDataCard({this.sleeptimer});
 
-  @override 
-  Widget build(BuildContext context){
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8),
       child: ListTile(
+        isThreeLine: true,
         onTap: () async {
-           await showDialog(
+          await showDialog(
               context: context,
               builder: (_) => new AlertDialog(
-                    title: Text("My Sleep Data"),
-                    content: Text("Wanna changes on " + sleeptimer.sleepdate),
+                    title: Text(sleeptimer.sleepdate),
+                    content: Text("Start time: " +
+                        sleeptimer.sleepdate +
+                        "\n End time: " +
+                        sleeptimer.wakeupdate +
+                        "\n Length: " +
+                        sleeptimer.hours.toString() +
+                        ":" +
+                        sleeptimer.minutes.toString() +
+                        ":" +
+                        sleeptimer.seconds.toString() +
+                        "\n\n Rating: " +
+                        sleeptimer.rating),
                     actions: <Widget>[
                       FlatButton(
                           onPressed: () async {
                             Navigator.pop(context);
                             bool result =
-                                await SleepTimerServices.deleteProduct(sleeptimer.id);
+                                await SleepTimerServices.deleteProduct(
+                                    sleeptimer.id);
                             if (result == true) {
                               Fluttertoast.showToast(
-                                  msg: "Success :-)",
+                                  msg: "Data deleted",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER_RIGHT,
                                   backgroundColor: Colors.red,
@@ -40,11 +50,12 @@ class TimeDataCard extends StatelessWidget {
                     ],
                   ));
         },
-
         title: Text(sleeptimer.rating),
-        subtitle: Text(sleeptimer.sleeptime),
-        leading: Icon(Icons.star),
-        
+        subtitle: Text(sleeptimer.sleeptime + "\n" + sleeptimer.sleepdate),
+        leading: Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
       ),
     );
   }

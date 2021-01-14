@@ -10,7 +10,7 @@ class SleepTimerServices {
 
   static Future<bool> addTimer(SleepTimer sleepTimer) async {
     await Firebase.initializeApp();
-    
+
     productDoc = await productCollection.add({
       'id': "",
       'sleeptime': sleepTimer.sleeptime,
@@ -21,7 +21,6 @@ class SleepTimerServices {
       'username': sleepTimer.username,
       'sleepdate': sleepTimer.sleepdate,
       'wakeupdate': sleepTimer.wakeupdate
-
     });
 
     if (productDoc.id != null) {
@@ -35,9 +34,7 @@ class SleepTimerServices {
     }
   }
 
-    static Future deleteProduct(String productID) async {
-
+  static Future deleteProduct(String productID) async {
     await productCollection.doc(productID).delete();
-    
   }
 }

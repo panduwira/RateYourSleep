@@ -29,10 +29,10 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-            brightness: Brightness.light, primaryColor: Colors.red[600]),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark, primaryColor: Colors.red[400]),
-        themeMode: ThemeMode.system,
+          brightness: Brightness.light, primaryColor: Colors.red[600]),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, primaryColor: Colors.red[400]),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -54,7 +54,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           labelText: 'Name',
                           hintText: "Write your name",
                           border: OutlineInputBorder()),
-                      
                     ),
                     SizedBox(height: 10),
                     TextFormField(
@@ -65,16 +64,16 @@ class _SignUpPageState extends State<SignUpPage> {
                           labelText: 'Email',
                           hintText: "Write your email",
                           border: OutlineInputBorder()),
-                      validator: (String value){
-                      if(value.isEmpty)
-                      {
-                        return 'Please a Enter';
-                      }
-                      if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)){
-                        return 'Please a valid Email';
-                      }
-                      return null;
-                    }, 
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please a Enter';
+                        }
+                        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                            .hasMatch(value)) {
+                          return 'Please a valid Email';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10),
                     TextFormField(
@@ -84,13 +83,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon: Icon(Icons.account_circle),
                           labelText: 'Password',
                           border: OutlineInputBorder()),
-                      validator: (String value){
-                      if(value.isEmpty)
-                      {
-                        return 'Please a Enter Password';
-                      }
-                      return null;
-                    },
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please a Enter Password';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 40),
                     RaisedButton.icon(
@@ -130,9 +128,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               clearForm();
                             });
                             Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return SignInPage();
-                              }));
+                                MaterialPageRoute(builder: (context) {
+                              return SignInPage();
+                            }));
                           } else {
                             Fluttertoast.showToast(
                               msg: result,

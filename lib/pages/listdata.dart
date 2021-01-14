@@ -11,13 +11,13 @@ class _ListDataPageState extends State<ListDataPage> {
   static String name;
   bool isLoading = false;
   User _auth = FirebaseAuth.instance.currentUser;
-    CollectionReference userCollection =
+  CollectionReference userCollection =
       FirebaseFirestore.instance.collection("users");
   CollectionReference productCollection =
       FirebaseFirestore.instance.collection("timer");
   //UserServices.userCollection.where("name", isEqualTo: name.toString()));
   //productCollection.where("user", isEqualTo: "unapproved");
-  
+
   void getUserUpdate() async {
     userCollection.doc(_auth.uid).snapshots().listen((event) {
       name = event.data()['name'];
@@ -29,11 +29,12 @@ class _ListDataPageState extends State<ListDataPage> {
     getUserUpdate();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("$name" + " Data"),
+        title: Text("My Sleep Data"),
         centerTitle: true,
         leading: Container(),
       ),
@@ -42,11 +43,13 @@ class _ListDataPageState extends State<ListDataPage> {
             width: double.infinity,
             height: double.infinity,
             child: StreamBuilder<QuerySnapshot>(
-              stream: productCollection.where('username', isEqualTo : name).snapshots(),
+              stream: productCollection
+                  .where('username', isEqualTo: name)
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return Text("Failed to get products data!");
+                  return Text("Failed to get sleep data");
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {

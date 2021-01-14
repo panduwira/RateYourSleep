@@ -10,7 +10,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    HomePage2(),
+    HomePage(),
     ListDataPage(),
     AccountPage(),
   ];
@@ -31,7 +31,7 @@ class _MainMenuState extends State<MainMenu> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Timer'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.single_bed_sharp), label: 'My data'),
+              icon: Icon(Icons.single_bed_sharp), label: 'My Data'),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), label: 'My Account'),
         ],

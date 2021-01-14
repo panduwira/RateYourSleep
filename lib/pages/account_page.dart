@@ -25,7 +25,6 @@ class _AccountPageState extends State<AccountPage> {
 
   void getUserUpdate() async {
     userCollection.doc(_auth.uid).snapshots().listen((event) {
-      img = event.data()['profilePicture'];
       name = event.data()['name'];
       email = event.data()['email'];
       if (img == "") {
@@ -61,55 +60,6 @@ class _AccountPageState extends State<AccountPage> {
                     width: double.infinity,
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 50,
-                        ),
-                        CircleAvatar(
-                          radius: 100,
-                          backgroundImage: NetworkImage(
-                            img ??
-                                "https://firebasestorage.googleapis.com/v0/b/startapp-ece15.appspot.com/o/assets%2Fdefault-user-image.png?alt=media&token=9807934a-cf98-4433-9c22-c013e6fc1859",
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        RaisedButton.icon(
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          padding: EdgeInsets.all(8),
-                          icon: Icon(Icons.image),
-                          label: Text('Edit Photo'),
-                          onPressed: () async {
-                            await chooseImage();
-                            await UserServices.updateProfilePicture(
-                                    _auth.uid, imageFile)
-                                .then((value) {
-                              if (value) {
-                                Fluttertoast.showToast(
-                                  msg: "Profile picture updated",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  backgroundColor: Colors.green,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
-                              } else {
-                                Fluttertoast.showToast(
-                                  msg: "Failed to update profile picture",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
-                              }
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
                         Text(
                           name ?? '',
                           style: TextStyle(
