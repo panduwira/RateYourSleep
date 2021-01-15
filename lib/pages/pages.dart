@@ -12,6 +12,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rateyoursleep/widgets/supertimecard.dart';
 import 'package:rateyoursleep/widgets/timecard.dart';
 
 part 'signin_page.dart';
