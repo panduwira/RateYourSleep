@@ -105,42 +105,44 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 8,
               ),
-              StreamBuilder<QuerySnapshot>(
-                stream: productCollection
-                    .where('username', isEqualTo: name)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("Failed to get sleep data");
-                  }
+              Flexible(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: productCollection
+                      .where('username', isEqualTo: name)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Failed to get sleep data");
+                    }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return SpinKitFadingCircle(
-                      size: 50,
-                      color: Colors.blue,
-                    );
-                  }
-
-                  return ListView(
-                    shrinkWrap: true,
-                    children: snapshot.data.docs.map((DocumentSnapshot doc) {
-                      return TimeDataCard(
-                        sleeptimer: SleepTimer(
-                          doc.data()['id'],
-                          doc.data()['sleeptime'],
-                          doc.data()['hours'],
-                          doc.data()['minutes'],
-                          doc.data()['seconds'],
-                          doc.data()['rating'],
-                          doc.data()['username'],
-                          doc.data()['sleepdate'],
-                          doc.data()['wakeupdate'],
-                        ),
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SpinKitFadingCircle(
+                        size: 50,
+                        color: Colors.blue,
                       );
-                    }).toList(),
-                  );
-                },
+                    }
+
+                    return ListView(
+                      shrinkWrap: true,
+                      children: snapshot.data.docs.map((DocumentSnapshot doc) {
+                        return TimeDataCard(
+                          sleeptimer: SleepTimer(
+                            doc.data()['id'],
+                            doc.data()['sleeptime'],
+                            doc.data()['hours'],
+                            doc.data()['minutes'],
+                            doc.data()['seconds'],
+                            doc.data()['rating'],
+                            doc.data()['username'],
+                            doc.data()['sleepdate'],
+                            doc.data()['wakeupdate'],
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
               ),
             ])),
         isLoading == true
