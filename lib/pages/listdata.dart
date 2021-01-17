@@ -19,8 +19,6 @@ class _ListDataPageState extends State<ListDataPage> {
   //UserServices.userCollection.where("name", isEqualTo: name.toString()));
   //productCollection.where("user", isEqualTo: "unapproved");
 
-
-
   void getUserUpdate() async {
     userCollection.doc(_auth.uid).snapshots().listen((event) {
       name = event.data()['name'];
@@ -41,21 +39,27 @@ class _ListDataPageState extends State<ListDataPage> {
         centerTitle: true,
         leading: Container(),
       ),
-      body: Stack(
-        alignment: Alignment.topLeft,
-        children: <Widget>[
+      body: Stack(alignment: Alignment.topLeft, children: <Widget>[
         Container(
             padding: EdgeInsets.only(bottom: 20),
             width: double.infinity,
             height: double.infinity,
-            child: Column(children: 
-            <Widget>[
-              SizedBox(height: 16,),
-              Text("Latest Data", textAlign: TextAlign.left, style: TextStyle(fontSize: 24),),
-              SizedBox(height: 16,),
+            child: Column(children: <Widget>[
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Latest Data",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+                height: 8,
+              ),
               StreamBuilder<QuerySnapshot>(
                 stream: productCollection
-                    .where('username', isEqualTo: name).limit(1)
+                    .where('username', isEqualTo: name)
+                    .limit(1)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -90,9 +94,17 @@ class _ListDataPageState extends State<ListDataPage> {
                   );
                 },
               ),
-              SizedBox(height: 16,),
-              Text("All Data", textAlign: TextAlign.left, style: TextStyle(fontSize: 24),),
-              SizedBox(height: 16,),
+              SizedBox(
+                height: 8,
+              ),
+              Text(
+                "All Data",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+                height: 8,
+              ),
               StreamBuilder<QuerySnapshot>(
                 stream: productCollection
                     .where('username', isEqualTo: name)

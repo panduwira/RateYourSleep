@@ -133,10 +133,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             }));
                           } else {
                             Fluttertoast.showToast(
-                              msg: result,
+                              msg: "Account created",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.green,
                               textColor: Colors.white,
                               fontSize: 16.0,
                             );

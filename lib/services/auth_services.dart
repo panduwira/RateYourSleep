@@ -10,7 +10,7 @@ class AuthServices {
   static Future<String> signUp(
       String email, String password, String name) async {
     await Firebase.initializeApp();
-    String msg = "Signed up Signed infully";
+    String msg = "Account created";
     try {
       UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -19,7 +19,7 @@ class AuthServices {
 
       auth.signOut();
       await UserServices.updateUser(users);
-      msg = "Signed up successfully";
+      msg = "Signed out";
     } catch (e) {
       msg = e.toString();
     }

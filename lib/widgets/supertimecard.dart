@@ -16,8 +16,7 @@ class SuperTimeDataCard extends StatelessWidget {
           await showDialog(
               context: context,
               builder: (_) => new AlertDialog(
-                    title: Text("Last Session : " + 
-                      sleeptimer.sleepdate),
+                    title: Text("Last Session : " + sleeptimer.sleepdate),
                     content: Text("Start time: " +
                         sleeptimer.sleepdate +
                         "\n End time: " +
@@ -51,7 +50,7 @@ class SuperTimeDataCard extends StatelessWidget {
                     ],
                   ));
         },
-        title: Text(sleeptimer.rating, style: TextStyle(fontSize: 32),),
+        title: Text(sleeptimer.rating),
         subtitle: Text(sleeptimer.sleeptime + "\n" + sleeptimer.sleepdate),
         leading: Icon(
           Icons.star,

@@ -55,6 +55,7 @@ class TimeDataCard extends StatelessWidget {
         leading: Icon(
           Icons.star,
           color: Colors.amber,
+          size: 36,
         ),
       ),
     );
