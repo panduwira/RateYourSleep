@@ -6,6 +6,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final ctrlFullName = TextEditingController();
   final ctrlName = TextEditingController();
   final ctrlEmail = TextEditingController();
   final ctrlPassword = TextEditingController();
@@ -20,6 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void clearForm() {
+    ctrlFullName.clear();
     ctrlName.clear();
     ctrlEmail.clear();
     ctrlPassword.clear();
@@ -43,10 +45,23 @@ class _SignUpPageState extends State<SignUpPage> {
             margin: EdgeInsets.all(18),
             child: ListView(
               children: <Widget>[
+                Text("Welcome to rateyoursleep", textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 36),),
+                Text("Improve your sleep for better future", textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 25),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: ctrlFullName,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          labelText: 'Full Name',
+                          hintText: "Write your full name",
+                          border: OutlineInputBorder()),
+                    ),
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: ctrlName,
                       decoration: InputDecoration(
@@ -60,7 +75,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       keyboardType: TextInputType.emailAddress,
                       controller: ctrlEmail,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.email),
                           labelText: 'Email',
                           hintText: "Write your email",
                           border: OutlineInputBorder()),
@@ -80,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: ctrlPassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.security),
                           labelText: 'Password',
                           border: OutlineInputBorder()),
                       validator: (String value) {
@@ -126,11 +141,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             setState(() {
                               isLoading = false;
                               clearForm();
-                            });
-                            Navigator.pushReplacement(context,
+                              Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) {
                               return SignInPage();
                             }));
+                            });
                           } else {
                             Fluttertoast.showToast(
                               msg: result,

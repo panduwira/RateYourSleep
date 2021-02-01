@@ -34,6 +34,18 @@ class SleepTimerServices {
     }
   }
 
+  static Future<bool> editProduct(SleepTimer sleepTimer) async {
+        await Firebase.initializeApp();
+
+    await productCollection.doc(sleepTimer.id).update(
+      {
+        'rating': sleepTimer.rating
+      },
+    );
+
+    return true;
+  }
+
   static Future deleteProduct(String productID) async {
     await productCollection.doc(productID).delete();
   }

@@ -23,9 +23,10 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          brightness: Brightness.light, primaryColor: Colors.red[600]),
+          brightness: Brightness.light, primaryColor: Colors.blue[400]),
       darkTheme:
-          ThemeData(brightness: Brightness.dark, primaryColor: Colors.red[400]),
+          ThemeData(
+            brightness: Brightness.dark, primaryColor: Colors.blue[600]),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -37,6 +38,10 @@ class _SignInPageState extends State<SignInPage> {
             margin: EdgeInsets.all(18),
             child: ListView(
               children: <Widget>[
+                Text("Welcome to rateyoursleep", textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 36),),
+                Text("Improve your sleep for better future", textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

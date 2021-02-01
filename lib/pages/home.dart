@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   User _auth = FirebaseAuth.instance.currentUser;
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection("users");
+  Duration initialtimer = new Duration(hours: 0, minutes: 0, seconds: 0);
 
   void getUserUpdate() async {
     userCollection.doc(_auth.uid).snapshots().listen((event) {
@@ -28,17 +29,46 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
   void initState() {
     getUserUpdate();
     super.initState();
+    var androidInit = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOSInit = new IOSInitializationSettings();
+    var initilizationsSettings =
+        new InitializationSettings(android: androidInit, iOS: iOSInit);
+    var fltrNotification = new FlutterLocalNotificationsPlugin();
+    var notificationSelected;
+    fltrNotification.initialize(initilizationsSettings,
+        onSelectNotification: notificationSelected);
+  }
+
+  Future<void> _showNotification() async {
+    var androidDetails = new AndroidNotificationDetails(
+      "CHANNEL_ID",
+      "CHANNEL_NAME",
+      "CHANNEL_DESCRIPTION",
+      importance: Importance.max,
+      playSound: true,
+      timeoutAfter: 5000,
+      styleInformation: DefaultStyleInformation(true, true),
+    );
+    var iSODetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+        new NotificationDetails(android: androidDetails, iOS: iSODetails);
+    await FlutterLocalNotificationsPlugin().show(0, 'Your Data has been saved',
+        'Have a nice day', generalNotificationDetails,
+        payload: 'test payload');
   }
 
   static DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm");
   static Timestamp timestamp = Timestamp.now();
   static DateTime getStartTime =
-      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch)
+          .toLocal();
   static DateTime getStopTime =
-      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+      DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch)
+          .toLocal();
   String startTimeFormat = dateFormat.format(getStartTime);
   String stopTimeFormat = dateFormat.format(getStopTime);
 
@@ -46,7 +76,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    stopwatch.reset();
     super.dispose();
   }
 
@@ -90,6 +119,14 @@ class _HomePageState extends State<HomePage> {
         (stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, "0"));
   }
 
+  String setTimer(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitHours = twoDigits(duration.inHours.remainder(24));
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   int getHour() {
     return stopwatch.elapsed.inHours.toInt();
   }
@@ -105,7 +142,7 @@ class _HomePageState extends State<HomePage> {
   void timeStart() {
     setState(() {
       startTime = true;
-      getStartTime = new DateTime.now();
+      getStartTime = new DateTime.now().toLocal();
     });
 
     startTimeFormat = dateFormat.format(getStartTime);
@@ -114,7 +151,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void timeStop() {
-    getStopTime = new DateTime.now();
+    getStopTime = new DateTime.now().toLocal();
     stopTimeFormat = dateFormat.format(getStopTime);
     getFinalHours();
     getFinalMinutes();
@@ -124,6 +161,7 @@ class _HomePageState extends State<HomePage> {
 
   void timeReset() {
     stopwatch.reset();
+    initialtimer = new Duration(hours: 0, minutes: 0, seconds: 0);
   }
 
   @override
@@ -137,11 +175,79 @@ class _HomePageState extends State<HomePage> {
           title: Text("Rate Your Sleep"),
           centerTitle: true,
           leading: Container(),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                  return HomeSettings();
+                }));
+              },
+            )
+          ],
         ),
         body: Container(
             margin: EdgeInsets.all(20),
             child: ListView(children: <Widget>[
-              SizedBox(height: 64),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey,
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32.0),
+                  ),
+                ),
+                child: Text(
+                  setTimer(initialtimer).substring(0, 5),
+                  style: TextStyle(color: Colors.black, fontSize: 32),
+                ),
+                onPressed: () {
+                  if (time == "00:00:00") {
+                    showDialog(
+                        barrierColor: Colors.blue.withOpacity(0.25),
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (_) => new AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0))),
+                            title: Text(
+                              "SetyourTimer",
+                              style: TextStyle(fontSize: 24.0),
+                            ),
+                            content: Container(
+                                height: 150,
+                                child: CupertinoTimerPicker(
+                                  mode: CupertinoTimerPickerMode.hm,
+                                  minuteInterval: 1,
+                                  secondInterval: 1,
+                                  initialTimerDuration: initialtimer,
+                                  onTimerDurationChanged:
+                                      (Duration changedtimer) {
+                                    setState(() {
+                                      initialtimer = changedtimer;
+                                    });
+                                  },
+                                ))));
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "Your timer is stll running",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER_RIGHT,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+              ),
+              SizedBox(height: 16),
               SizedBox(
                 width: 359,
                 child: Text(
@@ -152,24 +258,41 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 32),
-              Container(
-                width: 85,
-                height: 92,
-                color: Color(0xffc4c4c4),
-                child: Center(
-                  child: Text(
-                    time,
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontFamily: "Sans Serif",
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+              Stack(alignment: Alignment.center, children: [
+                CircularPercentIndicator(
+
+                  animation: false,
+                  linearGradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.topLeft,
+                      colors: [Colors.blue, Colors.cyan]),
+                  radius: 280.0,
+                  lineWidth: 10.0,
+                  percent: getSeconds() / 60,
+                  center: Text(time.substring(0, 5),
+                      style: TextStyle(fontSize: 48)),
                 ),
-              ),
+                CircularPercentIndicator(
+                  animation: false,
+                  linearGradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.topLeft,
+                      colors: [Colors.red, Colors.pink]),
+                  radius: 320.0,
+                  lineWidth: 10.0,
+                  percent: getMinutes() / 60,
+                ),
+                CircularPercentIndicator(
+                  animation: false,
+                  linearGradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.topLeft,
+                      colors: [Colors.green, Colors.lime]),
+                  radius: 360.0,
+                  lineWidth: 10.0,
+                  percent: getHour() / 24,
+                ),
+              ]),
               SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -189,7 +312,18 @@ class _HomePageState extends State<HomePage> {
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else {
-                          timeStart();
+                          if (time.toString() ==
+                              setTimer(initialtimer).toString()) {
+                            Fluttertoast.showToast(
+                                msg: "Set your timer first",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else {
+                            timeStart();
+                          }
                         }
                       },
                       child: Padding(
@@ -216,14 +350,40 @@ class _HomePageState extends State<HomePage> {
                           timeStop();
                           setState(() {
                             Widget cancelButton = FlatButton(
-                              child: Text("Discard"),
+                              child: Text(
+                                "Discard",
+                                style: TextStyle(color: Colors.redAccent),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).pop();
                                 timeReset();
                               },
+                              onLongPress: () {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Push this button if you don't want to save your sleep data",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER_RIGHT,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              },
                             );
                             Widget okButton = FlatButton(
-                              child: Text("Save"),
+                              child: Text(
+                                "Save",
+                                style: TextStyle(color: Colors.greenAccent),
+                              ),
+                              onLongPress: () {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Push this button if you want to save your sleep data",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER_RIGHT,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              },
                               onPressed: () async {
                                 if (_rating == null) {
                                   Fluttertoast.showToast(
@@ -248,6 +408,7 @@ class _HomePageState extends State<HomePage> {
                                       await SleepTimerServices.addTimer(
                                           sleepTimer);
                                   if (result == true) {
+                                    _showNotification();
                                     Fluttertoast.showToast(
                                         msg: "Your sleep data has been saved",
                                         toastLength: Toast.LENGTH_SHORT,
@@ -271,50 +432,80 @@ class _HomePageState extends State<HomePage> {
                               },
                             );
                             showDialog(
+                                barrierColor: Colors.blue.withOpacity(0.25),
                                 barrierDismissible: false,
                                 context: context,
                                 builder: (_) => new AlertDialog(
-                                        actions: [
-                                          cancelButton,
-                                          okButton,
-                                        ],
-                                        title: Text(
-                                          "How was your sleep, " + name + "?",
-                                          style: TextStyle(fontSize: 24.0),
-                                        ),
-                                        content: Container(
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Text("Start time: " +
-                                                    startTimeFormat),
-                                                Text("End time: " +
-                                                    stopTimeFormat),
-                                                Text("Length: " + time),
-                                                Text(""),
-                                                Text("Rating"),
-                                                RatingBar.builder(
-                                                  itemCount: 5,
-                                                  initialRating: 3,
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: true,
-                                                  itemBuilder: (context, _) =>
-                                                      Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  onRatingUpdate: (rating) {
-                                                    setState(() {
-                                                      _rating = rating;
-                                                    });
-                                                  },
-                                                ),
-                                              ]),
-                                        )));
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(32.0))),
+                                    actions: [
+                                      cancelButton,
+                                      okButton,
+                                    ],
+                                    title: Text(
+                                      "How was your sleep, " + name + "?",
+                                      style: TextStyle(fontSize: 24.0),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    content: Container(
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text("Start time: " +
+                                                startTimeFormat),
+                                            Text("End time: " + stopTimeFormat),
+                                            Text("Length: " + time),
+                                            Center(
+                                              child: RatingBar.builder(
+                                                itemCount: 5,
+                                                initialRating: 3,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemBuilder: (context, _) {
+                                                  switch (_) {
+                                                    case 0:
+                                                      return Icon(
+                                                        Icons.star,
+                                                        color: Colors.red[900],
+                                                      );
+                                                    case 1:
+                                                      return Icon(
+                                                        Icons.star,
+                                                        color: Colors.red,
+                                                      );
+                                                    case 2:
+                                                      return Icon(
+                                                        Icons.star,
+                                                        color: Colors.yellow,
+                                                      );
+                                                    case 3:
+                                                      return Icon(
+                                                        Icons.star,
+                                                        color:
+                                                            Colors.green[400],
+                                                      );
+                                                    case 4:
+                                                      return Icon(
+                                                        Icons.star,
+                                                        color:
+                                                            Colors.green[200],
+                                                      );
+                                                  }
+                                                },
+                                                onRatingUpdate: (rating) {
+                                                  setState(() {
+                                                    _rating = rating;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ]),
+                                    )));
                           });
                         }
                       },
