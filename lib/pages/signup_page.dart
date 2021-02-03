@@ -10,6 +10,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final ctrlName = TextEditingController();
   final ctrlEmail = TextEditingController();
   final ctrlPassword = TextEditingController();
+  String dropdownValue = '-';
   bool isLoading = false;
 
   @override
@@ -31,9 +32,9 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          brightness: Brightness.light, primaryColor: Colors.red[600]),
-      darkTheme:
-          ThemeData(brightness: Brightness.dark, primaryColor: Colors.red[400]),
+          brightness: Brightness.light, primaryColor: Colors.blue[600]),
+      darkTheme: ThemeData(
+          brightness: Brightness.dark, primaryColor: Colors.blue[400]),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -45,10 +46,16 @@ class _SignUpPageState extends State<SignUpPage> {
             margin: EdgeInsets.all(18),
             child: ListView(
               children: <Widget>[
-                Text("Welcome to rateyoursleep", textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 36),),
-                Text("Improve your sleep for better future", textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),),
+                Text(
+                  "Welcome to rateyoursleep",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 36),
+                ),
+                Text(
+                  "Improve your sleep for better future",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -59,7 +66,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon: Icon(Icons.person),
                           labelText: 'Full Name',
                           hintText: "Write your full name",
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
                     ),
                     SizedBox(height: 10),
                     TextFormField(
@@ -68,7 +77,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon: Icon(Icons.account_circle),
                           labelText: 'Name',
                           hintText: "Write your name",
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
                     ),
                     SizedBox(height: 10),
                     TextFormField(
@@ -78,10 +89,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon: Icon(Icons.email),
                           labelText: 'Email',
                           hintText: "Write your email",
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please a Enter';
+                          return 'Please enter your email';
                         }
                         if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                             .hasMatch(value)) {
@@ -95,9 +108,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: ctrlPassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.security),
+                          prefixIcon: Icon(Icons.vpn_key),
                           labelText: 'Password',
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please a Enter Password';
@@ -142,9 +157,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               isLoading = false;
                               clearForm();
                               Navigator.pushReplacement(context,
-                                MaterialPageRoute(builder: (context) {
-                              return SignInPage();
-                            }));
+                                  MaterialPageRoute(builder: (context) {
+                                return SignInPage();
+                              }));
                             });
                           } else {
                             Fluttertoast.showToast(

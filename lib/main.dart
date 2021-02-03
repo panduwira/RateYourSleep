@@ -7,7 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +14,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null) {
       return MaterialApp(
-
         debugShowCheckedModeBanner: false,
         home: MainMenu(),
         theme: ThemeData(
@@ -32,7 +30,9 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             colorScheme: ColorScheme.dark(),
             textSelectionColor: Colors.white,
-            bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Colors.black, selectedItemColor: Colors.blue[500]),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              backgroundColor: Colors.black, 
+              selectedItemColor: Colors.blue[500]),
             bottomAppBarColor: Colors.black,
             bottomAppBarTheme: BottomAppBarTheme(color: Colors.black)),
         themeMode: ThemeMode.system,

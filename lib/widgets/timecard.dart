@@ -9,8 +9,9 @@ class TimeDataCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
       child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
         child: ListTile(
           tileColor: Colors.grey,
           isThreeLine: true,
@@ -48,16 +49,18 @@ class TimeDataCard extends StatelessWidget {
                                     fontSize: 16.0);
                               }
                             },
-                            child: Text('Delete')),
+                            child: Text('Delete', style: TextStyle(color: Colors.redAccent),)),
                       ],
                     ));
           },
-          title: Text(sleeptimer.rating),
-          subtitle: Text(sleeptimer.sleeptime + "\n" + sleeptimer.sleepdate),
+          title: Text(sleeptimer.sleeptime, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+          subtitle: Text(sleeptimer.rating, style: TextStyle(fontSize: 20),),
           leading: Icon(
             Icons.star,
             color: Colors.amber,
+            size: 32,
           ),
+          trailing: Text(sleeptimer.sleepdate + "\n\n" + sleeptimer.wakeupdate),
         ),
       ),
     );

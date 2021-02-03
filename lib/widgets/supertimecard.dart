@@ -9,7 +9,7 @@ class SuperTimeDataCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(15)),
         child: ListTile(
@@ -37,16 +37,14 @@ class SuperTimeDataCard extends StatelessWidget {
                           sleeptimer.rating),
                     ));
           },
-          title: Text(
-            sleeptimer.rating,
-            style: TextStyle(fontSize: 32),
-          ),
-          subtitle: Text(sleeptimer.sleeptime + "\n" + sleeptimer.sleepdate),
+                    title: Text(sleeptimer.sleeptime, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),),
+          subtitle: Text(sleeptimer.rating, style: TextStyle(fontSize: 20),),
           leading: Icon(
             Icons.star,
-            color: Colors.amber,
+            color: Colors.yellow,
             size: 36,
           ),
+          trailing: Text(sleeptimer.sleepdate + "\n\n" + sleeptimer.wakeupdate),
         ),
       ),
     );

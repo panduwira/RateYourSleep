@@ -24,9 +24,8 @@ class _SignInPageState extends State<SignInPage> {
     return MaterialApp(
       theme: ThemeData(
           brightness: Brightness.light, primaryColor: Colors.blue[400]),
-      darkTheme:
-          ThemeData(
-            brightness: Brightness.dark, primaryColor: Colors.blue[600]),
+      darkTheme: ThemeData(
+          brightness: Brightness.dark, primaryColor: Colors.blue[600]),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -38,10 +37,16 @@ class _SignInPageState extends State<SignInPage> {
             margin: EdgeInsets.all(18),
             child: ListView(
               children: <Widget>[
-                Text("Welcome to rateyoursleep", textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 36),),
-                Text("Improve your sleep for better future", textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),),
+                Text(
+                  "Welcome to rateyoursleep",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 36),
+                ),
+                Text(
+                  "Improve your sleep for better future",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -50,19 +55,21 @@ class _SignInPageState extends State<SignInPage> {
                       keyboardType: TextInputType.emailAddress,
                       controller: ctrlEmail,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.mail),
                           labelText: 'Email',
                           hintText: "Write your email",
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
                     ),
                     SizedBox(height: 10),
                     TextFormField(
                       controller: ctrlPassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.vpn_key),
                           labelText: 'Password',
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
                     ),
                     SizedBox(height: 40),
                     RaisedButton.icon(

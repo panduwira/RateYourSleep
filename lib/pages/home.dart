@@ -182,8 +182,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return HomeSettings();
                 }));
               },
@@ -216,8 +215,8 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(32.0))),
                             title: Text(
-                              "SetyourTimer",
-                              style: TextStyle(fontSize: 24.0),
+                              "Set your Timer",
+                              style: TextStyle(fontSize: 24.0), textAlign: TextAlign.center,
                             ),
                             content: Container(
                                 height: 150,
@@ -260,7 +259,6 @@ class _HomePageState extends State<HomePage> {
               ),
               Stack(alignment: Alignment.center, children: [
                 CircularPercentIndicator(
-
                   animation: false,
                   linearGradient: LinearGradient(
                       begin: Alignment.topRight,
@@ -349,10 +347,14 @@ class _HomePageState extends State<HomePage> {
                         } else {
                           timeStop();
                           setState(() {
-                            Widget cancelButton = FlatButton(
+                            Widget cancelButton = MaterialButton(
+                              color: Colors.redAccent,
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
                               child: Text(
                                 "Discard",
-                                style: TextStyle(color: Colors.redAccent),
+                                style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -369,10 +371,14 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 16.0);
                               },
                             );
-                            Widget okButton = FlatButton(
+                            Widget okButton = MaterialButton(
+                              color: Colors.greenAccent,
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0),
+                              ),
                               child: Text(
                                 "Save",
-                                style: TextStyle(color: Colors.greenAccent),
+                                style: TextStyle(color: Colors.white),
                               ),
                               onLongPress: () {
                                 Fluttertoast.showToast(
@@ -439,10 +445,7 @@ class _HomePageState extends State<HomePage> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(32.0))),
-                                    actions: [
-                                      cancelButton,
-                                      okButton,
-                                    ],
+                                    actions: [],
                                     title: Text(
                                       "How was your sleep, " + name + "?",
                                       style: TextStyle(fontSize: 24.0),
@@ -462,6 +465,7 @@ class _HomePageState extends State<HomePage> {
                                             Text("Length: " + time),
                                             Center(
                                               child: RatingBar.builder(
+                                                glowColor: Colors.yellow,
                                                 itemCount: 5,
                                                 initialRating: 3,
                                                 direction: Axis.horizontal,
@@ -504,6 +508,8 @@ class _HomePageState extends State<HomePage> {
                                                 },
                                               ),
                                             ),
+                                            okButton,
+                                            cancelButton
                                           ]),
                                     )));
                           });
@@ -519,38 +525,5 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ])));
-  }
-
-  showAlertDialog(BuildContext context) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Save"),
-      onPressed: () {
-        Navigator.of(context).pop();
-        timeReset();
-      },
-    );
-
-    // set up the AlertDialog
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Rate Your Sleep"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[Text('test'), Text('test')],
-            ),
-          ),
-          //Text("How was Your Sleep ?" + time),
-
-          actions: [
-            okButton,
-          ],
-        );
-      },
-    );
   }
 }
