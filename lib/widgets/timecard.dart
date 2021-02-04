@@ -20,18 +20,39 @@ class TimeDataCard extends StatelessWidget {
                 context: context,
                 builder: (_) => new AlertDialog(
                       title: Text(sleeptimer.sleepdate),
-                      content: Text("Start time: " +
-                          sleeptimer.sleepdate +
-                          "\n End time: " +
-                          sleeptimer.wakeupdate +
-                          "\n Length: " +
-                          sleeptimer.hours.toString() +
-                          ":" +
-                          sleeptimer.minutes.toString() +
-                          ":" +
-                          sleeptimer.seconds.toString() +
-                          "\n\n Rating: " +
-                          sleeptimer.rating),
+                      content: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                                child: ListTile(
+                              title: Text('Start Time '),
+                              trailing: Text(sleeptimer.sleepdate),
+                            )),
+                            Container(
+                                child: ListTile(
+                              title: Text('End Time '),
+                              trailing: Text(sleeptimer.wakeupdate),
+                            )),
+                            Container(
+                              child: ListTile(
+                              title: Text('Length '),
+                              trailing: Text(sleeptimer.hours.toString() +
+                                  ":" +
+                                  sleeptimer.minutes.toString() +
+                                  ":" +
+                                  sleeptimer.seconds.toString()),
+                            )),
+                            Container(
+                              child: ListTile(
+                              title: Text('Rating '),
+                              trailing: Text(sleeptimer.rating),
+                            )),
+                          ],
+                        ),
+                      ),
                       actions: <Widget>[
                         FlatButton(
                             onPressed: () async {

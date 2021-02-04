@@ -216,7 +216,8 @@ class _HomePageState extends State<HomePage> {
                                     BorderRadius.all(Radius.circular(32.0))),
                             title: Text(
                               "Set your Timer",
-                              style: TextStyle(fontSize: 24.0), textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 24.0),
+                              textAlign: TextAlign.center,
                             ),
                             content: Container(
                                 height: 150,
@@ -415,6 +416,10 @@ class _HomePageState extends State<HomePage> {
                                           sleepTimer);
                                   if (result == true) {
                                     _showNotification();
+                                    Navigator.pushReplacement(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return ListDataPage();
+                                    }));
                                     Fluttertoast.showToast(
                                         msg: "Your sleep data has been saved",
                                         toastLength: Toast.LENGTH_SHORT,
@@ -459,10 +464,21 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.stretch,
                                           mainAxisSize: MainAxisSize.min,
                                           children: <Widget>[
-                                            Text("Start time: " +
-                                                startTimeFormat),
-                                            Text("End time: " + stopTimeFormat),
-                                            Text("Length: " + time),
+                                            Container(
+                                                child: ListTile(
+                                              title: Text('Start Time '),
+                                              trailing: Text(startTimeFormat),
+                                            )),
+                                            Container(
+                                                child: ListTile(
+                                              title: Text('End Time '),
+                                              trailing: Text(stopTimeFormat),
+                                            )),
+                                            Container(
+                                                child: ListTile(
+                                              title: Text('Length '),
+                                              trailing: Text(time),
+                                            )),
                                             Center(
                                               child: RatingBar.builder(
                                                 glowColor: Colors.yellow,

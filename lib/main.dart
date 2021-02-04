@@ -17,7 +17,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: MainMenu(),
         theme: ThemeData(
-            appBarTheme: AppBarTheme(),
+            appBarTheme: AppBarTheme(
+              color: Colors.blue[400],
+            centerTitle: true
+            ),
             brightness: Brightness.light,
             colorScheme: ColorScheme.light(),
             textSelectionColor: Colors.black,
@@ -26,7 +29,8 @@ class MyApp extends StatelessWidget {
             bottomAppBarColor: Colors.white,
            bottomAppBarTheme: BottomAppBarTheme(color: Colors.white) ),
         darkTheme: ThemeData(
-            appBarTheme: AppBarTheme(color: Colors.blue[600]),
+            appBarTheme: AppBarTheme(color: Colors.blue[600],
+            centerTitle: true),
             brightness: Brightness.dark,
             colorScheme: ColorScheme.dark(),
             textSelectionColor: Colors.white,
