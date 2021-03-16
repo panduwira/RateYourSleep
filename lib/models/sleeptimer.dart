@@ -15,8 +15,7 @@ class SleepTimer extends Equatable{
   //final Timestamp stoptimestamp;
 
   SleepTimer(this.id,this.sleeptime,this.hours,this.minutes,this.seconds,this.rating, this.username, this.sleepdate, this.wakeupdate);
-
+  
   @override
   List<Object> get props => [id, sleeptime, hours, minutes, seconds, rating, username, sleepdate, wakeupdate];
- 
 }

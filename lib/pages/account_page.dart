@@ -17,6 +17,24 @@ class _AccountPageState extends State<AccountPage> {
   PickedFile imageFile;
   final ImagePicker imagePicker = ImagePicker();
 
+  List<charts.Series<SleepTimerChart, String>> _seriesBarData;
+  List<SleepTimerChart> mydata;
+
+  _generateData(mydata) {
+    _seriesBarData = List<charts.Series<SleepTimerChart, String>>();
+    _seriesBarData.add(
+      charts.Series(
+          data: mydata,
+          id: 'Sleep Data',
+          displayName: 'Sleep Data',
+          colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault, 
+          measureFn: (SleepTimerChart st, _) => st.hours,
+          domainFn: (SleepTimerChart st, _) =>
+              st.sleepdate.toString()),
+          
+    );
+  }
+
   Future<int> totalfunction() async {
     // Code returning Integer value from Await function Call
     QuerySnapshot productSnapshot = await FirebaseFirestore.instance
@@ -35,7 +53,7 @@ class _AccountPageState extends State<AccountPage> {
         .get();
     productSnapshot.docs.forEach((doc) {
       totalhours = totalhours + doc.data()['hours'];
-     });
+    });
     return totalhours;
   }
 
@@ -46,8 +64,10 @@ class _AccountPageState extends State<AccountPage> {
         .where("username", isEqualTo: name)
         .get();
     productSnapshot.docs.forEach((doc) {
-      totalhours = totalhours + (doc.data()['hours'] * doc.data()['minutes'])/ productSnapshot.docs.length;
-     });
+      totalhours = totalhours +
+          (doc.data()['hours'] * doc.data()['minutes']) /
+              productSnapshot.docs.length;
+    });
     return totalhours.toDouble();
   }
 
@@ -78,16 +98,9 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My Account'),
-        centerTitle: true,
-        leading: Container(),
-      ),
       body: RefreshIndicator(
-        onRefresh: () async{
-
-        },
-              child: Stack(children: [
+        onRefresh: () async {},
+        child: Stack(children: [
           Container(
             padding: EdgeInsets.only(bottom: 20),
             child: Column(
@@ -177,7 +190,23 @@ class _AccountPageState extends State<AccountPage> {
                                 }
                                 return CircularProgressIndicator();
                               }),
-                          
+                          StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('timer')
+                                  .where("username", isEqualTo: name)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return CircularProgressIndicator();
+                                } else {
+                                  List<SleepTimerChart> sleeptimer = snapshot
+                                      .data.docs
+                                      .map((doc) =>
+                                          SleepTimerChart.fromMap(doc.data()))
+                                      .toList();
+                                  return buildChart(context, sleeptimer);
+                                }
+                              })
                         ],
                       ),
                     ),
@@ -192,7 +221,8 @@ class _AccountPageState extends State<AccountPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: Text("Confirmation"),
-                              content: Text("Are you sure you want to sign out?"),
+                              content:
+                                  Text("Are you sure you want to sign out?"),
                               actions: [
                                 FlatButton(
                                   onPressed: () async {
@@ -202,7 +232,8 @@ class _AccountPageState extends State<AccountPage> {
                                     await AuthServices.signout().then((value) {
                                       if (value) {
                                         Navigator.pushReplacement(context,
-                                            MaterialPageRoute(builder: (context) {
+                                            MaterialPageRoute(
+                                                builder: (context) {
                                           return SignInPage();
                                         }));
                                         setState(() {
@@ -249,6 +280,30 @@ class _AccountPageState extends State<AccountPage> {
               : Container()
         ]),
       ),
+    );
+  }
+
+  Widget buildChart(BuildContext context, List<SleepTimerChart> sleeptimer) {
+    mydata = sleeptimer;
+    _generateData(mydata);
+    return Container(
+      height: 100,
+      width: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+        Expanded(
+          child: charts.BarChart(
+            _seriesBarData,
+            animate: true,
+            animationDuration: Duration(seconds: 2),
+            domainAxis: new charts.OrdinalAxisSpec(
+              showAxisLine: true,
+              renderSpec: new charts.NoneRenderSpec()
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }

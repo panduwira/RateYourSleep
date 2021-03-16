@@ -19,6 +19,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rateyoursleep/widgets/supertimecard.dart';
 import 'package:rateyoursleep/widgets/timecard.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:theme_provider/theme_provider.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 part 'signin_page.dart';
 part 'signup_page.dart';

@@ -164,6 +164,7 @@ class _HomePageState extends State<HomePage> {
     initialtimer = new Duration(hours: 0, minutes: 0, seconds: 0);
   }
 
+
   @override
   Widget build(BuildContext context) {
     void clearForm() {
@@ -171,24 +172,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Rate Your Sleep"),
-          centerTitle: true,
-          leading: Container(),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.settings,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return HomeSettings();
-                }));
-              },
-            )
-          ],
-        ),
         body: Container(
             margin: EdgeInsets.all(20),
             child: ListView(children: <Widget>[
@@ -264,32 +247,12 @@ class _HomePageState extends State<HomePage> {
                   linearGradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.topLeft,
-                      colors: [Colors.blue, Colors.cyan]),
-                  radius: 280.0,
+                      colors: [Theme.of(context).primaryColor, Theme.of(context).accentColor]),
+                  radius: 360.0,
                   lineWidth: 10.0,
                   percent: getSeconds() / 60,
                   center: Text(time.substring(0, 5),
                       style: TextStyle(fontSize: 48)),
-                ),
-                CircularPercentIndicator(
-                  animation: false,
-                  linearGradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.topLeft,
-                      colors: [Colors.red, Colors.pink]),
-                  radius: 320.0,
-                  lineWidth: 10.0,
-                  percent: getMinutes() / 60,
-                ),
-                CircularPercentIndicator(
-                  animation: false,
-                  linearGradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.topLeft,
-                      colors: [Colors.green, Colors.lime]),
-                  radius: 360.0,
-                  lineWidth: 10.0,
-                  percent: getHour() / 24,
                 ),
               ]),
               SizedBox(height: 25),
@@ -299,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   RawMaterialButton(
                       elevation: 2.0,
-                      fillColor: Colors.green,
+                      fillColor: Theme.of(context).buttonColor,
                       shape: CircleBorder(),
                       onPressed: () {
                         if (time != "00:00:00") {
@@ -329,12 +292,12 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(10),
                           child: Icon(
                             Icons.play_arrow,
-                            color: Colors.white,
+                            color: Theme.of(context).primaryIconTheme.color,
                             size: 35,
                           ))),
                   RawMaterialButton(
                       elevation: 2.0,
-                      fillColor: Colors.red,
+                      fillColor: Theme.of(context).buttonColor,
                       shape: CircleBorder(),
                       onPressed: () {
                         if (time == "00:00:00") {
@@ -535,7 +498,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(10),
                           child: Icon(
                             Icons.stop,
-                            color: Colors.white,
+                            color: Theme.of(context).primaryIconTheme.color,
                             size: 35,
                           ))),
                 ],

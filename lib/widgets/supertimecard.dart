@@ -10,13 +10,14 @@ class SuperTimeDataCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).cardTheme.color,
+      shadowColor: Theme.of(context).cardTheme.shadowColor,
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(15)),
         child: ListTile(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          tileColor: Colors.grey,
           isThreeLine: true,
           onTap: () async {
             await showDialog(

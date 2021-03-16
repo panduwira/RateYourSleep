@@ -295,11 +295,6 @@ class _ListDataPageState extends State<ListDataPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("My Sleep Data"),
-        centerTitle: true,
-        leading: Container(),
-      ),
       body: OrientationBuilder(builder: (context, orientation){
         if(orientation == Orientation.portrait){
           return portaitMode();
