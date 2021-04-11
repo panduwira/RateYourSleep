@@ -121,11 +121,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                     ),
                     SizedBox(height: 40),
-                    RaisedButton.icon(
+                    ElevatedButton.icon(
                       icon: Icon(Icons.cloud_upload),
                       label: Text("Sign Up"),
-                      textColor: Colors.white,
-                      color: Colors.blueAccent,
                       onPressed: () async {
                         if (ctrlName.text == "" ||
                             ctrlEmail.text == "" ||

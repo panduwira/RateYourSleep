@@ -72,11 +72,9 @@ class _SignInPageState extends State<SignInPage> {
                               borderRadius: BorderRadius.circular(20))),
                     ),
                     SizedBox(height: 40),
-                    RaisedButton.icon(
+                    ElevatedButton.icon(
                       icon: Icon(Icons.cloud_upload),
                       label: Text("Sign In"),
-                      textColor: Colors.white,
-                      color: Colors.blueAccent,
                       onPressed: () async {
                         if (ctrlEmail.text == "" || ctrlPassword.text == "") {
                           Fluttertoast.showToast(

@@ -55,7 +55,7 @@ class TimeDataCard extends StatelessWidget {
                         ),
                       ),
                       actions: <Widget>[
-                        FlatButton(
+                        TextButton(
                             onPressed: () async {
                               Navigator.pop(context);
                               bool result =

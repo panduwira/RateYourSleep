@@ -6,3 +6,4 @@ import 'package:flutter/material.dart';
 part 'sleeptimer.dart';
 part 'users.dart';
 part 'sleeptimerchart.dart';
+part 'ratingchart.dart';

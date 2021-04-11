@@ -21,17 +21,18 @@ class _AccountPageState extends State<AccountPage> {
   List<SleepTimerChart> mydata;
 
   _generateData(mydata) {
+    // ignore: deprecated_member_use
     _seriesBarData = List<charts.Series<SleepTimerChart, String>>();
     _seriesBarData.add(
       charts.Series(
           data: mydata,
           id: 'Sleep Data',
           displayName: 'Sleep Data',
-          colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault, 
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
           measureFn: (SleepTimerChart st, _) => st.hours,
-          domainFn: (SleepTimerChart st, _) =>
-              st.sleepdate.toString()),
-          
+          domainFn: (SleepTimerChart st, _) => st.sleepdate.toString(),
+          labelAccessorFn: (SleepTimerChart strow, _) =>
+              "${strow.sleepdate.toString()}"),
     );
   }
 
@@ -69,6 +70,18 @@ class _AccountPageState extends State<AccountPage> {
               productSnapshot.docs.length;
     });
     return totalhours.toDouble();
+  }
+
+  Future<double> totalratingratefunction() async {
+    double totalrating = 0;
+    QuerySnapshot productSnapshot = await FirebaseFirestore.instance
+        .collection('timer')
+        .where("username", isEqualTo: name)
+        .get();
+    productSnapshot.docs.forEach((doc) {
+      totalrating = totalrating + double.parse((doc.data()['rating']));
+    });
+    return totalrating.toDouble() / productSnapshot.docs.length;
   }
 
   Future chooseImage() async {
@@ -190,6 +203,25 @@ class _AccountPageState extends State<AccountPage> {
                                 }
                                 return CircularProgressIndicator();
                               }),
+                          FutureBuilder<double>(
+                              future: totalratingratefunction(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<double> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListTile(
+                                      tileColor: Colors.blue,
+                                      leading: Icon(Icons.bedtime),
+                                      title: Text("My Rate Ratings",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          )),
+                                      trailing: Text(snapshot.data.toString(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                          )));
+                                }
+                                return CircularProgressIndicator();
+                              }),  
                           StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
                                   .collection('timer')
@@ -206,7 +238,8 @@ class _AccountPageState extends State<AccountPage> {
                                       .toList();
                                   return buildChart(context, sleeptimer);
                                 }
-                              })
+                              }),
+                          
                         ],
                       ),
                     ),
@@ -214,7 +247,7 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -224,7 +257,7 @@ class _AccountPageState extends State<AccountPage> {
                               content:
                                   Text("Are you sure you want to sign out?"),
                               actions: [
-                                FlatButton(
+                                TextButton(
                                   onPressed: () async {
                                     setState(() {
                                       isLoading = true;
@@ -248,7 +281,7 @@ class _AccountPageState extends State<AccountPage> {
                                   },
                                   child: Text("Yes"),
                                 ),
-                                FlatButton(
+                                TextButton(
                                   child: Text("No"),
                                   onPressed: () {
                                     Navigator.pop(context);
@@ -258,9 +291,6 @@ class _AccountPageState extends State<AccountPage> {
                             );
                           });
                     },
-                    padding: EdgeInsets.all(12),
-                    textColor: Colors.white,
-                    color: Colors.redAccent,
                     child: Text("Sign Out"),
                   ),
                 ),
@@ -287,23 +317,22 @@ class _AccountPageState extends State<AccountPage> {
     mydata = sleeptimer;
     _generateData(mydata);
     return Container(
-      height: 100,
-      width: 100,
+      height: 200,
+      width: 200,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-        Expanded(
-          child: charts.BarChart(
-            _seriesBarData,
-            animate: true,
-            animationDuration: Duration(seconds: 2),
-            domainAxis: new charts.OrdinalAxisSpec(
-              showAxisLine: true,
-              renderSpec: new charts.NoneRenderSpec()
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: charts.BarChart(
+                _seriesBarData,
+                animate: true,
+                animationDuration: Duration(seconds: 2),
+                domainAxis: new charts.OrdinalAxisSpec(
+                    showAxisLine: true,
+                    renderSpec: new charts.NoneRenderSpec()),
+              ),
             ),
-          ),
-        ),
-      ]),
+          ]),
     );
   }
 }

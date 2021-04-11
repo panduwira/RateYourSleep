@@ -28,7 +28,7 @@ class _HomeSettingsState extends State<HomeSettings> {
               },
             )),
         body: Stack(alignment: Alignment.topLeft, children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               child: Text("Theme Dialog"),
               onPressed: () {
                 showDialog(

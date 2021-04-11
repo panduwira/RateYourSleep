@@ -98,8 +98,8 @@ class _MainMenuState extends State<MainMenu> {
           },
         ),
         ListTile(
-          title: Text("Tips"),
-          leading: Icon(Icons.question_answer),
+          title: Text("Settings"),
+          leading: Icon(Icons.settings),
           onTap: () {},
         ),
         ListTile(
@@ -118,7 +118,7 @@ class _MainMenuState extends State<MainMenu> {
                     title: Text("Confirmation"),
                     content: Text("Are you sure you want to sign out?"),
                     actions: [
-                      FlatButton(
+                      TextButton(
                         onPressed: () async {
                           setState(() {
                             isLoading = true;
@@ -141,7 +141,7 @@ class _MainMenuState extends State<MainMenu> {
                         },
                         child: Text("Yes"),
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text("No"),
                         onPressed: () {
                           Navigator.pop(context);

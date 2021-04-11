@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
                   accentIconTheme: IconThemeData(
                     color: Colors.blueAccent
                   ),
-                  textSelectionColor: Colors.black,
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
                       backgroundColor: Colors.white60,
                       selectedItemColor: Colors.blueAccent),
@@ -78,7 +77,6 @@ class MyApp extends StatelessWidget {
                   accentIconTheme: IconThemeData(
                     color: Colors.blueAccent
                   ),
-                  textSelectionColor: Colors.white,
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
                       backgroundColor: Colors.black,
                       selectedItemColor: Colors.blue[500]),
@@ -94,7 +92,6 @@ class MyApp extends StatelessWidget {
                     
                   ),
                   scaffoldBackgroundColor: Colors.white,
-                  textSelectionColor: Colors.white,
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
                       backgroundColor: Colors.blue,
                       selectedItemColor: Colors.white,
@@ -118,12 +115,10 @@ class MyApp extends StatelessWidget {
         home: SignInPage(),
         theme: ThemeData(
             brightness: Brightness.light,
-            colorScheme: ColorScheme.light(),
-            textSelectionColor: Colors.black),
+            colorScheme: ColorScheme.light(),),
         darkTheme: ThemeData(
             brightness: Brightness.dark,
-            colorScheme: ColorScheme.dark(),
-            textSelectionColor: Colors.white),
+            colorScheme: ColorScheme.dark(),),
         themeMode: ThemeMode.system,
       );
     }

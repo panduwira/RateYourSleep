@@ -164,21 +164,21 @@ class _HomePageState extends State<HomePage> {
     initialtimer = new Duration(hours: 0, minutes: 0, seconds: 0);
   }
 
+  void clearForm() {
+    setState(() {});
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    void clearForm() {
-      setState(() {});
-    }
-
-    return Scaffold(
-        body: Container(
-            margin: EdgeInsets.all(20),
-            child: ListView(children: <Widget>[
-              ElevatedButton(
+  Widget portaitMode() {
+    return Container(
+        margin: EdgeInsets.all(20),
+        child: ListView(children: <Widget>[
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tightFor(width: 150, height: 40),
+              child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.grey,
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32.0),
                   ),
@@ -204,6 +204,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             content: Container(
                                 height: 150,
+                                width: double.maxFinite,
                                 child: CupertinoTimerPicker(
                                   mode: CupertinoTimerPickerMode.hm,
                                   minuteInterval: 1,
@@ -227,282 +228,641 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+          ),
+          SizedBox(height: 16),
+          SizedBox(
+            width: 359,
+            child: Text(
+              "Sleep Timer",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 36,
               ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: 359,
-                child: Text(
-                  "Sleep Timer",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 36,
-                  ),
-                ),
-              ),
-              Stack(alignment: Alignment.center, children: [
-                CircularPercentIndicator(
-                  animation: false,
-                  linearGradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.topLeft,
-                      colors: [Theme.of(context).primaryColor, Theme.of(context).accentColor]),
-                  radius: 360.0,
-                  lineWidth: 10.0,
-                  percent: getSeconds() / 60,
-                  center: Text(time.substring(0, 5),
-                      style: TextStyle(fontSize: 48)),
-                ),
-              ]),
-              SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  RawMaterialButton(
-                      elevation: 2.0,
-                      fillColor: Theme.of(context).buttonColor,
-                      shape: CircleBorder(),
-                      onPressed: () {
-                        if (time != "00:00:00") {
-                          Fluttertoast.showToast(
-                              msg: "Your timer is stll running",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER_RIGHT,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        } else {
-                          if (time.toString() ==
-                              setTimer(initialtimer).toString()) {
+            ),
+          ),
+          Stack(alignment: Alignment.center, children: [
+            CircularPercentIndicator(
+              animation: false,
+              linearGradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.topLeft,
+                  colors: [
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).accentColor
+                  ]),
+              radius: 360.0,
+              lineWidth: 10.0,
+              percent: getSeconds() / 60,
+              center:
+                  Text(time.substring(0, 5), style: TextStyle(fontSize: 48)),
+            ),
+          ]),
+          SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              RawMaterialButton(
+                  elevation: 2.0,
+                  fillColor: Theme.of(context).buttonColor,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    if (time != "00:00:00") {
+                      Fluttertoast.showToast(
+                          msg: "Your timer is stll running",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER_RIGHT,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      if (time.toString() ==
+                          setTimer(initialtimer).toString()) {
+                        Fluttertoast.showToast(
+                            msg: "Set your timer first",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER_RIGHT,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        timeStart();
+                      }
+                    }
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 35,
+                      ))),
+              RawMaterialButton(
+                  elevation: 2.0,
+                  fillColor: Theme.of(context).buttonColor,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    if (time == "00:00:00") {
+                      Fluttertoast.showToast(
+                          msg: "You have not started your sleep timer",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER_RIGHT,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      timeStop();
+                      setState(() {
+                        Widget cancelButton = MaterialButton(
+                          color: Colors.redAccent,
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            "Discard",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            timeReset();
+                          },
+                          onLongPress: () {
                             Fluttertoast.showToast(
-                                msg: "Set your timer first",
+                                msg:
+                                    "Push this button if you don't want to save your sleep data",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER_RIGHT,
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
-                          } else {
-                            timeStart();
-                          }
-                        }
-                      },
-                      child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Icon(
-                            Icons.play_arrow,
-                            color: Theme.of(context).primaryIconTheme.color,
-                            size: 35,
-                          ))),
-                  RawMaterialButton(
-                      elevation: 2.0,
-                      fillColor: Theme.of(context).buttonColor,
-                      shape: CircleBorder(),
-                      onPressed: () {
-                        if (time == "00:00:00") {
-                          Fluttertoast.showToast(
-                              msg: "You have not started your sleep timer",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER_RIGHT,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        } else {
-                          timeStop();
-                          setState(() {
-                            Widget cancelButton = MaterialButton(
-                              color: Colors.redAccent,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(30.0),
-                              ),
-                              child: Text(
-                                "Discard",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
+                          },
+                        );
+                        Widget okButton = MaterialButton(
+                          color: Colors.greenAccent,
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onLongPress: () {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Push this button if you want to save your sleep data",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          },
+                          onPressed: () async {
+                            if (_rating == null) {
+                              Fluttertoast.showToast(
+                                  msg: "Please rate your sleep",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER_RIGHT,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else {
+                              SleepTimer sleepTimer = SleepTimer(
+                                  "",
+                                  time,
+                                  hours,
+                                  minutes,
+                                  seconds,
+                                  _rating.toString(),
+                                  name,
+                                  startTimeFormat,
+                                  stopTimeFormat);
+                              bool result =
+                                  await SleepTimerServices.addTimer(sleepTimer);
+                              if (result == true) {
+                                _showNotification();
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ListDataPage();
+                                }));
+                                Fluttertoast.showToast(
+                                    msg: "Your sleep data has been saved",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER_RIGHT,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
                                 timeReset();
-                              },
-                              onLongPress: () {
+                                clearForm();
+                              } else {
                                 Fluttertoast.showToast(
-                                    msg:
-                                        "Push this button if you don't want to save your sleep data",
+                                    msg: "Failed to save data",
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.CENTER_RIGHT,
                                     backgroundColor: Colors.red,
-                                    textColor: Colors.white,
+                                    textColor: Colors.yellow,
                                     fontSize: 16.0);
-                              },
-                            );
-                            Widget okButton = MaterialButton(
-                              color: Colors.greenAccent,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(30.0),
-                              ),
-                              child: Text(
-                                "Save",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onLongPress: () {
-                                Fluttertoast.showToast(
-                                    msg:
-                                        "Push this button if you want to save your sleep data",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER_RIGHT,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              },
-                              onPressed: () async {
-                                if (_rating == null) {
-                                  Fluttertoast.showToast(
-                                      msg: "Please rate your sleep",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER_RIGHT,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                } else {
-                                  SleepTimer sleepTimer = SleepTimer(
-                                      "",
-                                      time,
-                                      hours,
-                                      minutes,
-                                      seconds,
-                                      _rating.toString(),
-                                      name,
-                                      startTimeFormat,
-                                      stopTimeFormat);
-                                  bool result =
-                                      await SleepTimerServices.addTimer(
-                                          sleepTimer);
-                                  if (result == true) {
-                                    _showNotification();
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return ListDataPage();
-                                    }));
-                                    Fluttertoast.showToast(
-                                        msg: "Your sleep data has been saved",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER_RIGHT,
-                                        backgroundColor: Colors.green,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                    timeReset();
-                                    clearForm();
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: "Failed to save data",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER_RIGHT,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.yellow,
-                                        fontSize: 16.0);
-                                  }
-                                }
-                                Navigator.of(context).pop();
-                              },
-                            );
-                            showDialog(
-                                barrierColor: Colors.blue.withOpacity(0.25),
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (_) => new AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(32.0))),
-                                    actions: [],
-                                    title: Text(
-                                      "How was your sleep, " + name + "?",
-                                      style: TextStyle(fontSize: 24.0),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: Container(
-                                      child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Container(
-                                                child: ListTile(
-                                              title: Text('Start Time '),
-                                              trailing: Text(startTimeFormat),
-                                            )),
-                                            Container(
-                                                child: ListTile(
-                                              title: Text('End Time '),
-                                              trailing: Text(stopTimeFormat),
-                                            )),
-                                            Container(
-                                                child: ListTile(
-                                              title: Text('Length '),
-                                              trailing: Text(time),
-                                            )),
-                                            Center(
-                                              child: RatingBar.builder(
-                                                glowColor: Colors.yellow,
-                                                itemCount: 5,
-                                                initialRating: 3,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemBuilder: (context, _) {
-                                                  switch (_) {
-                                                    case 0:
-                                                      return Icon(
-                                                        Icons.star,
-                                                        color: Colors.red[900],
-                                                      );
-                                                    case 1:
-                                                      return Icon(
-                                                        Icons.star,
-                                                        color: Colors.red,
-                                                      );
-                                                    case 2:
-                                                      return Icon(
-                                                        Icons.star,
-                                                        color: Colors.yellow,
-                                                      );
-                                                    case 3:
-                                                      return Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            Colors.green[400],
-                                                      );
-                                                    case 4:
-                                                      return Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            Colors.green[200],
-                                                      );
-                                                  }
-                                                },
-                                                onRatingUpdate: (rating) {
-                                                  setState(() {
-                                                    _rating = rating;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                            okButton,
-                                            cancelButton
-                                          ]),
-                                    )));
-                          });
-                        }
-                      },
-                      child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Icon(
-                            Icons.stop,
-                            color: Theme.of(context).primaryIconTheme.color,
-                            size: 35,
-                          ))),
-                ],
+                              }
+                            }
+                            Navigator.of(context).pop();
+                          },
+                        );
+                        showDialog(
+                            barrierColor: Colors.blue.withOpacity(0.25),
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => new AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(32.0))),
+                                actions: [],
+                                title: Text(
+                                  "How was your sleep, " + name + "?",
+                                  style: TextStyle(fontSize: 24.0),
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                            child: ListTile(
+                                          title: Text('Start Time '),
+                                          trailing: Text(startTimeFormat),
+                                        )),
+                                        Container(
+                                            child: ListTile(
+                                          title: Text('End Time '),
+                                          trailing: Text(stopTimeFormat),
+                                        )),
+                                        Container(
+                                            child: ListTile(
+                                          title: Text('Length '),
+                                          trailing: Text(time),
+                                        )),
+                                        Center(
+                                          child: RatingBar.builder(
+                                            glowColor: Colors.yellow,
+                                            itemCount: 5,
+                                            initialRating: 3,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemBuilder: (context, _) {
+                                              switch (_) {
+                                                case 0:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.red[900],
+                                                  );
+                                                case 1:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.red,
+                                                  );
+                                                case 2:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.yellow,
+                                                  );
+                                                case 3:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.green[400],
+                                                  );
+                                                case 4:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.green[200],
+                                                  );
+                                              }
+                                            },
+                                            onRatingUpdate: (rating) {
+                                              setState(() {
+                                                _rating = rating;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        okButton,
+                                        cancelButton
+                                      ]),
+                                )));
+                      });
+                    }
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.stop,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 35,
+                      ))),
+            ],
+          ),
+        ]));
+  }
+
+  Widget landscapeMode() {
+    return Container(
+        margin: EdgeInsets.all(20),
+        child: ListView(children: <Widget>[
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tightFor(width: 150, height: 40),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey,
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32.0),
+                  ),
+                ),
+                child: Text(
+                  setTimer(initialtimer).substring(0, 5),
+                  style: TextStyle(color: Colors.black, fontSize: 32),
+                ),
+                onPressed: () {
+                  if (time == "00:00:00") {
+                    showDialog(
+                        barrierColor: Colors.blue.withOpacity(0.25),
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (_) => new AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0))),
+                            title: Text(
+                              "Set your Timer",
+                              style: TextStyle(fontSize: 24.0),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: Container(
+                                height: double.maxFinite,
+                                width: 150,
+                                child: CupertinoTimerPicker(
+                                  mode: CupertinoTimerPickerMode.hm,
+                                  minuteInterval: 1,
+                                  secondInterval: 1,
+                                  initialTimerDuration: initialtimer,
+                                  onTimerDurationChanged:
+                                      (Duration changedtimer) {
+                                    setState(() {
+                                      initialtimer = changedtimer;
+                                    });
+                                  },
+                                ))));
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "Your timer is stll running",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER_RIGHT,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+                },
               ),
-            ])));
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+          ),
+          SizedBox(
+            width: 359,
+            child: Text(
+              "Sleep Timer",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 36,
+              ),
+            ),
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Stack(alignment: Alignment.center, children: [
+                  CircularPercentIndicator(
+                    animation: false,
+                    linearGradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.topLeft,
+                        colors: [
+                          Theme.of(context).primaryColor,
+                          Theme.of(context).accentColor
+                        ]),
+                    radius: 180.0,
+                    lineWidth: 10.0,
+                    percent: getSeconds() / 60,
+                    center: Text(time.substring(0, 5),
+                        style: TextStyle(fontSize: 36)),
+                  ),
+                ]),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      RawMaterialButton(
+                  elevation: 2.0,
+                  fillColor: Theme.of(context).buttonColor,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    if (time != "00:00:00") {
+                      Fluttertoast.showToast(
+                          msg: "Your timer is stll running",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER_RIGHT,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      if (time.toString() ==
+                          setTimer(initialtimer).toString()) {
+                        Fluttertoast.showToast(
+                            msg: "Set your timer first",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER_RIGHT,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        timeStart();
+                      }
+                    }
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 35,
+                      ))),
+              SizedBox(height: 20,),
+              RawMaterialButton(
+                  elevation: 2.0,
+                  fillColor: Theme.of(context).buttonColor,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    if (time == "00:00:00") {
+                      Fluttertoast.showToast(
+                          msg: "You have not started your sleep timer",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER_RIGHT,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      timeStop();
+                      setState(() {
+                        Widget cancelButton = MaterialButton(
+                          color: Colors.redAccent,
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            "Discard",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            timeReset();
+                          },
+                          onLongPress: () {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Push this button if you don't want to save your sleep data",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          },
+                        );
+                        Widget okButton = MaterialButton(
+                          color: Colors.greenAccent,
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onLongPress: () {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Push this button if you want to save your sleep data",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER_RIGHT,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          },
+                          onPressed: () async {
+                            if (_rating == null) {
+                              Fluttertoast.showToast(
+                                  msg: "Please rate your sleep",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER_RIGHT,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else {
+                              SleepTimer sleepTimer = SleepTimer(
+                                  "",
+                                  time,
+                                  hours,
+                                  minutes,
+                                  seconds,
+                                  _rating.toString(),
+                                  name,
+                                  startTimeFormat,
+                                  stopTimeFormat);
+                              bool result =
+                                  await SleepTimerServices.addTimer(sleepTimer);
+                              if (result == true) {
+                                _showNotification();
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ListDataPage();
+                                }));
+                                Fluttertoast.showToast(
+                                    msg: "Your sleep data has been saved",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER_RIGHT,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                timeReset();
+                                clearForm();
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Failed to save data",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER_RIGHT,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.yellow,
+                                    fontSize: 16.0);
+                              }
+                            }
+                            Navigator.of(context).pop();
+                          },
+                        );
+                        showDialog(
+                            barrierColor: Colors.blue.withOpacity(0.25),
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => new AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(32.0))),
+                                actions: [],
+                                title: Text(
+                                  "How was your sleep, " + name + "?",
+                                  style: TextStyle(fontSize: 24.0),
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                            child: ListTile(
+                                          title: Text('Start Time '),
+                                          trailing: Text(startTimeFormat),
+                                        )),
+                                        Container(
+                                            child: ListTile(
+                                          title: Text('End Time '),
+                                          trailing: Text(stopTimeFormat),
+                                        )),
+                                        Container(
+                                            child: ListTile(
+                                          title: Text('Length '),
+                                          trailing: Text(time),
+                                        )),
+                                        Center(
+                                          child: RatingBar.builder(
+                                            glowColor: Colors.yellow,
+                                            itemCount: 5,
+                                            initialRating: 3,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemBuilder: (context, _) {
+                                              switch (_) {
+                                                case 0:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.red[900],
+                                                  );
+                                                case 1:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.red,
+                                                  );
+                                                case 2:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.yellow,
+                                                  );
+                                                case 3:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.green[400],
+                                                  );
+                                                case 4:
+                                                  return Icon(
+                                                    Icons.star,
+                                                    color: Colors.green[200],
+                                                  );
+                                              }
+                                            },
+                                            onRatingUpdate: (rating) {
+                                              setState(() {
+                                                _rating = rating;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        okButton,
+                                        cancelButton
+                                      ]),
+                                )));
+                      });
+                    }
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.stop,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 35,
+                      ))),
+                    ]
+                    ),
+              ]),
+
+        ]));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: OrientationBuilder(builder: (context, orientation) {
+      if (orientation == Orientation.portrait) {
+        return portaitMode();
+      } else {
+        return landscapeMode();
+      }
+    }));
   }
 }
