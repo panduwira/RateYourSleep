@@ -53,7 +53,7 @@ class _MainMenuState extends State<MainMenu> {
           break;
         case 1:
           {
-            pagetitle = 'Rate Your Sleep';
+            pagetitle = 'Sleep Timer';
           }
           break;
         case 2:

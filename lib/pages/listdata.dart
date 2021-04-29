@@ -45,11 +45,15 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 16,
               ),
-              Text(
+              Align(
+                alignment: Alignment.centerLeft,
+
+                child: Text(
                 "Latest Data",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 24),
-              ),
+                style: TextStyle(fontSize: 20),
+                
+              )),
               SizedBox(
                 height: 16,
               ),
@@ -98,11 +102,14 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 16,
               ),
-              Text(
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
                 "All Data",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 24),
-              ),
+                style: TextStyle(fontSize: 20),
+                
+              )),
               SizedBox(
                 height: 16,
               ),
@@ -175,11 +182,15 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 16,
               ),
-              Text(
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
                 "Latest Data",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 24),
-              ),
+                style: TextStyle(fontSize: 18),
+                
+              )
+              ),          
               SizedBox(
                 height: 16,
               ),
@@ -228,10 +239,13 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 16,
               ),
-              Text(
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
                 "All Data",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: 18)       
+              )
               ),
               SizedBox(
                 height: 16,

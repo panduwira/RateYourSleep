@@ -234,16 +234,6 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.all(8.0),
           ),
           SizedBox(height: 16),
-          SizedBox(
-            width: 359,
-            child: Text(
-              "Sleep Timer",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 36,
-              ),
-            ),
-          ),
           Stack(alignment: Alignment.center, children: [
             CircularPercentIndicator(
               animation: false,
@@ -574,16 +564,6 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(8.0),
           ),
-          SizedBox(
-            width: 359,
-            child: Text(
-              "Sleep Timer",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 36,
-              ),
-            ),
-          ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -598,11 +578,11 @@ class _HomePageState extends State<HomePage> {
                           Theme.of(context).primaryColor,
                           Theme.of(context).accentColor
                         ]),
-                    radius: 180.0,
+                    radius: 140.0,
                     lineWidth: 10.0,
                     percent: getSeconds() / 60,
                     center: Text(time.substring(0, 5),
-                        style: TextStyle(fontSize: 36)),
+                        style: TextStyle(fontSize: 32)),
                   ),
                 ]),
                 Column(
