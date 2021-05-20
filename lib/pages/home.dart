@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   double _rating = 3;
   String name;
   User _auth = FirebaseAuth.instance.currentUser;
-  CollectionReference userCollection =
+  CollectionReference<Map<String, dynamic>> userCollection =
       FirebaseFirestore.instance.collection("users");
   Duration initialtimer = new Duration(hours: 0, minutes: 0, seconds: 0);
 

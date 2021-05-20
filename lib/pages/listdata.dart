@@ -8,14 +8,18 @@ class ListDataPage extends StatefulWidget {
 }
 
 class _ListDataPageState extends State<ListDataPage> {
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
+  }
   static String name;
   bool isLoading = false;
   User _auth = FirebaseAuth.instance.currentUser;
-  CollectionReference userCollection =
+  CollectionReference<Map<String, dynamic>> userCollection =
       FirebaseFirestore.instance.collection("users");
-  CollectionReference productCollection =
+  CollectionReference<Map<String, dynamic>> productCollection =
       FirebaseFirestore.instance.collection("timer");
-  Query productquery = FirebaseFirestore.instance.collection("timer");
+  Query<Map<String, dynamic>> productquery = FirebaseFirestore.instance.collection("timer");
   //UserServices.userCollection.where("name", isEqualTo: name.toString()));
   //productCollection.where("user", isEqualTo: "unapproved");
 
@@ -57,13 +61,13 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 16,
               ),
-              StreamBuilder<QuerySnapshot>(
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: productquery.orderBy('sleepdate', descending: true)
                       .where('username', isEqualTo: name)
                     .limit(1)
                     .snapshots(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                   if (snapshot.hasError) {
                     return Text("Failed to get sleep data");
                   }
@@ -81,7 +85,7 @@ class _ListDataPageState extends State<ListDataPage> {
 
                   return ListView(
                     shrinkWrap: true,
-                    children: snapshot.data.docs.map((DocumentSnapshot doc) {
+                    children: snapshot.data.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
                       return SuperTimeDataCard(
                         sleeptimer: SleepTimer(
                           doc.data()['id'],
@@ -114,12 +118,12 @@ class _ListDataPageState extends State<ListDataPage> {
                 height: 16,
               ),
               Flexible(
-                child: StreamBuilder<QuerySnapshot>(
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: productquery
                       .where('username', isEqualTo: name).orderBy('sleepdate', descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                     if (snapshot.hasError) {
                       return Text("Failed to get sleep data");
                     }
@@ -137,7 +141,7 @@ class _ListDataPageState extends State<ListDataPage> {
 
                     return ListView(
                       shrinkWrap: true,
-                      children: snapshot.data.docs.map((DocumentSnapshot doc) {
+                      children: snapshot.data.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
                         return TimeDataCard(
                           sleeptimer: SleepTimer(
                             doc.data()['id'],
@@ -194,13 +198,13 @@ class _ListDataPageState extends State<ListDataPage> {
               SizedBox(
                 height: 16,
               ),
-              StreamBuilder<QuerySnapshot>(
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: productquery.orderBy('sleepdate', descending: true)
                       .where('username', isEqualTo: name)
                     .limit(1)
                     .snapshots(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                   if (snapshot.hasError) {
                     return Text("Failed to get sleep data");
                   }
@@ -218,7 +222,7 @@ class _ListDataPageState extends State<ListDataPage> {
 
                   return ListView(
                     shrinkWrap: true,
-                    children: snapshot.data.docs.map((DocumentSnapshot doc) {
+                    children: snapshot.data.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
                       return SuperTimeDataCard(
                         sleeptimer: SleepTimer(
                           doc.data()['id'],
@@ -251,12 +255,12 @@ class _ListDataPageState extends State<ListDataPage> {
                 height: 16,
               ),
               Flexible(
-                child: StreamBuilder<QuerySnapshot>(
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: productquery
                       .where('username', isEqualTo: name).orderBy('sleepdate', descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                     if (snapshot.hasError) {
                       return Text("Failed to get sleep data");
                     }
@@ -274,7 +278,7 @@ class _ListDataPageState extends State<ListDataPage> {
 
                     return ListView(
                       shrinkWrap: true,
-                      children: snapshot.data.docs.map((DocumentSnapshot doc) {
+                      children: snapshot.data.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
                         return TimeDataCard(
                           sleeptimer: SleepTimer(
                             doc.data()['id'],

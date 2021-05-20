@@ -11,7 +11,7 @@ class _MainMenuState extends State<MainMenu> {
   int _selectedIndex = 0;
   bool isLoading = false;
   String pagetitle;
-  CollectionReference userCollection =
+  CollectionReference<Map<String, dynamic>> userCollection =
       FirebaseFirestore.instance.collection("users");
   User _auth = FirebaseAuth.instance.currentUser;
 
@@ -100,12 +100,32 @@ class _MainMenuState extends State<MainMenu> {
         ListTile(
           title: Text("Settings"),
           leading: Icon(Icons.settings),
-          onTap: () {},
+          onTap: () {
+          },
         ),
         ListTile(
           title: Text("About Application"),
           leading: Icon(Icons.info),
-          onTap: () {},
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                new AlertDialog (
+                  title: Text("Rate Your Sleep"),
+                  content: Container(
+                    
+                    child: ListView(
+                      children: <Widget>[
+                        ListTile(
+                          leading: Text("App Version"),
+                          trailing: Text("1.0.1"),
+                      )]
+                    ),
+                  )
+                );
+              }
+            );
+          },
         ),
         ListTile(
           title: Text("Log Out"),
@@ -163,6 +183,7 @@ class _MainMenuState extends State<MainMenu> {
                 : Container();
           },
         ),
+        
       ])),
       body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
       bottomNavigationBar: ClipRRect(
@@ -195,3 +216,5 @@ class MyThemeOptions implements AppThemeOptions {
   final Color specificButtonColor;
   MyThemeOptions(this.specificButtonColor);
 }
+
+
