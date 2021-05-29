@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,4 +11,3 @@ part 'sleeptimer.dart';
 part 'users.dart';
 part 'sleeptimerchart.dart';
 part 'ratingchart.dart';
-part 'ads.dart';

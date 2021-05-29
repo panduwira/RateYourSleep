@@ -17,6 +17,10 @@ class _MainMenuState extends State<MainMenu> {
 
   String img, name, email;
 
+  final BannerAd mainBanner = BannerAd(
+    
+  );
+
   PageController pageController;
   static List<Widget> _widgetOptions = <Widget>[
     ListDataPage(),

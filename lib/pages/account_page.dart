@@ -36,6 +36,25 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
+    List<charts.Series<RatingChart, String>> _seriesPieData;
+    List<RatingChart> ratingdata;
+
+    _generateData2(ratingdata){
+    // ignore: deprecated_member_use
+    _seriesPieData = List<charts.Series<RatingChart, String>>();
+    _seriesPieData.add(
+      charts.Series(
+          data: ratingdata,
+          id: 'Sleep Data',
+          displayName: 'Sleep Data',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          measureFn: (RatingChart rd, _) => rd.rating,
+          domainFn: (RatingChart rd, _) => rd.sleepdate.toString(),
+          labelAccessorFn: (RatingChart rdrow, _) =>
+              "${rdrow.sleepdate.toString()}"),
+    );
+    }
+
   Future<int> totalfunction() async {
     // Code returning Integer value from Await function Call
     QuerySnapshot productSnapshot = await FirebaseFirestore.instance
@@ -127,123 +146,125 @@ class _AccountPageState extends State<AccountPage> {
                     alignment: Alignment.center,
                     width: double.infinity,
                     height: double.infinity,
-                    child: Column(
-                      children: [
-                        Text(
-                          name ?? '',
-                          style: TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          email ?? '',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Data Information",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        FutureBuilder<int>(
-                            future: totalfunction(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<int> snapshot) {
-                              if (snapshot.hasData) {
-                                return ListTile(
-                                    tileColor: Colors.blue,
-                                    leading: Icon(Icons.bedtime),
-                                    title: Text("My Sleep",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        )),
-                                    trailing: Text(snapshot.data.toString(),
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                        )));
-                              }
-                              return CircularProgressIndicator();
-                            }),
-                        FutureBuilder<int>(
-                            future: totalhoursfunction(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<int> snapshot) {
-                              if (snapshot.hasData) {
-                                return ListTile(
-                                    tileColor: Colors.blue,
-                                    leading: Icon(Icons.bedtime),
-                                    title: Text("My Hours",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        )),
-                                    trailing: Text(snapshot.data.toString(),
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                        )));
-                              }
-                              return CircularProgressIndicator();
-                            }),
-                        FutureBuilder<double>(
-                            future: totalhoursratefunction(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<double> snapshot) {
-                              if (snapshot.hasData) {
-                                return ListTile(
-                                    tileColor: Colors.blue,
-                                    leading: Icon(Icons.bedtime),
-                                    title: Text("My Rate Hours",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        )),
-                                    trailing: Text(snapshot.data.toString(),
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                        )));
-                              }
-                              return CircularProgressIndicator();
-                            }),
-                        FutureBuilder<double>(
-                            future: totalratingratefunction(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<double> snapshot) {
-                              if (snapshot.hasData) {
-                                return ListTile(
-                                    tileColor: Colors.blue,
-                                    leading: Icon(Icons.bedtime),
-                                    title: Text("My Rate Ratings",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        )),
-                                    trailing: Text(snapshot.data.toString(),
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                        )));
-                              }
-                              return CircularProgressIndicator();
-                            }),
-                        SingleChildScrollView(
-                          child: StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('timer')
-                                  .where("username", isEqualTo: name)
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return CircularProgressIndicator();
-                                } else {
-                                  List<SleepTimerChart> sleeptimer = snapshot
-                                      .data.docs
-                                      .map((doc) =>
-                                          SleepTimerChart.fromMap(doc.data()))
-                                      .toList();
-                                  return buildChart(context, sleeptimer);
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            name ?? '',
+                            style: TextStyle(
+                                fontSize: 32, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            email ?? '',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Data Information",
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          FutureBuilder<int>(
+                              future: totalfunction(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<int> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListTile(
+                                      tileColor: Colors.blue,
+                                      leading: Icon(Icons.bedtime),
+                                      title: Text("My Sleep",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          )),
+                                      trailing: Text(snapshot.data.toString(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                          )));
                                 }
+                                return CircularProgressIndicator();
                               }),
-                        ),
-                      ],
+                          FutureBuilder<int>(
+                              future: totalhoursfunction(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<int> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListTile(
+                                      tileColor: Colors.blue,
+                                      leading: Icon(Icons.bedtime),
+                                      title: Text("My Hours",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          )),
+                                      trailing: Text(snapshot.data.toString(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                          )));
+                                }
+                                return CircularProgressIndicator();
+                              }),
+                          FutureBuilder<double>(
+                              future: totalhoursratefunction(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<double> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListTile(
+                                      tileColor: Colors.blue,
+                                      leading: Icon(Icons.bedtime),
+                                      title: Text("My Rate Hours",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          )),
+                                      trailing: Text(snapshot.data.toString(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                          )));
+                                }
+                                return CircularProgressIndicator();
+                              }),
+                          FutureBuilder<double>(
+                              future: totalratingratefunction(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<double> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListTile(
+                                      tileColor: Colors.blue,
+                                      leading: Icon(Icons.bedtime),
+                                      title: Text("My Rate Ratings",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          )),
+                                      trailing: Text(snapshot.data.toString(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                          )));
+                                }
+                                return CircularProgressIndicator();
+                              }),
+                          SingleChildScrollView(
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('timer')
+                                    .where("username", isEqualTo: name)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return CircularProgressIndicator();
+                                  } else {
+                                    List<SleepTimerChart> sleeptimer = snapshot
+                                        .data.docs
+                                        .map((doc) =>
+                                            SleepTimerChart.fromMap(doc.data()))
+                                        .toList();
+                                    return buildChart(context, sleeptimer);
+                                  }
+                                }),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -335,4 +356,34 @@ class _AccountPageState extends State<AccountPage> {
           ]),
     );
   }
+
+  Widget buildChart2(BuildContext context, List<RatingChart> ratingtimer){
+    ratingdata = ratingtimer;
+    _generateData2(ratingdata);
+    return Container(
+      height: 400,
+      width: 200,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: charts.PieChart(
+                _seriesPieData,
+                animate: true,
+                animationDuration: Duration(seconds: 2),
+                defaultRenderer: new charts.ArcRendererConfig(
+                  arcWidth: 100,
+                  arcRendererDecorators: [
+                          new charts.ArcLabelDecorator(
+                              labelPosition: charts.ArcLabelPosition.inside)
+                        ]
+                ),
+              ),
+            ),
+          ]),
+    );
+  }
 }
+
+
+
