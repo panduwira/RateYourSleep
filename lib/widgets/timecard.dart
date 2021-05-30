@@ -25,12 +25,12 @@ class TimeDataCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Container(
-                                child: ListTile(
+                              child: ListTile(
                               title: Text('Start Time '),
                               trailing: Text(sleeptimer.sleepdate),
                             )),
                             Container(
-                                child: ListTile(
+                              child: ListTile(
                               title: Text('End Time '),
                               trailing: Text(sleeptimer.wakeupdate),
                             )),

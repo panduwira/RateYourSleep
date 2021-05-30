@@ -1,5 +1,7 @@
 part of 'pages.dart';
 
+class Mainadhelper {}
+
 class MainMenu extends StatefulWidget {
   MainMenu({Key key}) : super(key: key);
 
@@ -17,9 +19,15 @@ class _MainMenuState extends State<MainMenu> {
 
   String img, name, email;
 
-  final BannerAd mainBanner = BannerAd(
-    
-  );
+  BannerAd bannerad;
+  BannerAd bannerad2;
+  bool banneradready = false;
+  bool banneradready2 = false;
+
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
+  }
 
   PageController pageController;
   static List<Widget> _widgetOptions = <Widget>[
@@ -42,6 +50,42 @@ class _MainMenuState extends State<MainMenu> {
     _widgetOptions.add(HomePage());
     _widgetOptions.add(AccountPage());
     pagetitle = "RateYourSleep";
+    bannerad = BannerAd(
+      adUnitId: 'ca-app-pub-5691367408910805/2637649666',
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            banneradready = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          banneradready = false;
+          ad.dispose();
+        },
+      ),
+    );
+      bannerad2 = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            banneradready2 = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          banneradready2 = false;
+          ad.dispose();
+        },
+      ),
+    );
+    bannerad..load();
+    bannerad2..load();
     getUserUpdate();
     super.initState();
   }
@@ -90,6 +134,17 @@ class _MainMenuState extends State<MainMenu> {
             color: Theme.of(context).primaryColor,
           ),
         ),
+        Stack(children: [
+          Center(),
+          if (banneradready)
+            Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: bannerad.size.width.toDouble(),
+                  height: bannerad.size.height.toDouble(),
+                  child: AdWidget(ad: bannerad),
+                ))
+        ]),
         ListTile(
           title: Text("Change Theme"),
           leading: Icon(Icons.format_paint),
@@ -102,9 +157,32 @@ class _MainMenuState extends State<MainMenu> {
           },
         ),
         ListTile(
-          title: Text("Settings"),
-          leading: Icon(Icons.settings),
+          title: Text("What's New"),
+          leading: Icon(Icons.list),
           onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return new AlertDialog(
+                      title: Text("What's New"),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Container(
+                                child: ListTile(
+                                title: Text('1.1.0'),
+                              )),
+                              Text(
+                                '- Added SetYourTimer\n- Timer Display has been replaced\n- Ability to change 3 theme manually\n- Apps Improvement'
+                              ),
+                            ]
+                        ),
+                      )
+                      );
+                });
           },
         ),
         ListTile(
@@ -112,23 +190,30 @@ class _MainMenuState extends State<MainMenu> {
           leading: Icon(Icons.info),
           onTap: () {
             showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                new AlertDialog (
-                  title: Text("Rate Your Sleep"),
-                  content: Container(
-                    
-                    child: ListView(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Text("App Version"),
-                          trailing: Text("1.0.1"),
-                      )]
-                    ),
-                  )
-                );
-              }
-            );
+                context: context,
+                builder: (BuildContext context) {
+                  return new AlertDialog(
+                      title: Text("About"),
+                      content: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              child: ListTile(
+                              title: Text('Version'),
+                              trailing: Text('1.0.1'),
+                            )),
+                            Container(
+                              child: ListTile(
+                              title: Text('Developed by'),
+                              trailing: Text('Koala Production'),
+                            )),
+                            Text('Rateyoursleep by Koala Production, 2020-2021')
+                          ]
+                      )
+                      );
+                });
           },
         ),
         ListTile(
@@ -187,7 +272,17 @@ class _MainMenuState extends State<MainMenu> {
                 : Container();
           },
         ),
-        
+        Stack(children: [
+          Center(),
+          if (banneradready2)
+            Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: bannerad2.size.width.toDouble(),
+                  height: bannerad2.size.height.toDouble(),
+                  child: AdWidget(ad: bannerad2),
+                ))
+        ]),
       ])),
       body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
       bottomNavigationBar: ClipRRect(
@@ -220,5 +315,3 @@ class MyThemeOptions implements AppThemeOptions {
   final Color specificButtonColor;
   MyThemeOptions(this.specificButtonColor);
 }
-
-

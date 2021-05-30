@@ -1,7 +1,7 @@
 part of 'models.dart';
 
 class RatingChart {
-  final int rating;
+  final String rating;
   final String sleepdate;
 
   RatingChart(this.rating, this.sleepdate);

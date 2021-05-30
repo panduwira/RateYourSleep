@@ -36,25 +36,6 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-    List<charts.Series<RatingChart, String>> _seriesPieData;
-    List<RatingChart> ratingdata;
-
-    _generateData2(ratingdata){
-    // ignore: deprecated_member_use
-    _seriesPieData = List<charts.Series<RatingChart, String>>();
-    _seriesPieData.add(
-      charts.Series(
-          data: ratingdata,
-          id: 'Sleep Data',
-          displayName: 'Sleep Data',
-          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-          measureFn: (RatingChart rd, _) => rd.rating,
-          domainFn: (RatingChart rd, _) => rd.sleepdate.toString(),
-          labelAccessorFn: (RatingChart rdrow, _) =>
-              "${rdrow.sleepdate.toString()}"),
-    );
-    }
-
   Future<int> totalfunction() async {
     // Code returning Integer value from Await function Call
     QuerySnapshot productSnapshot = await FirebaseFirestore.instance
@@ -134,118 +115,124 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 20),
-          child: Column(
-            children: [
-              Expanded(
-                child: Card(
-                  margin: EdgeInsets.all(18),
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            name ?? '',
-                            style: TextStyle(
-                                fontSize: 32, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            email ?? '',
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "Data Information",
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          FutureBuilder<int>(
-                              future: totalfunction(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<int> snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListTile(
-                                      tileColor: Colors.blue,
-                                      leading: Icon(Icons.bedtime),
-                                      title: Text("My Sleep",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          )),
-                                      trailing: Text(snapshot.data.toString(),
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                          )));
-                                }
-                                return CircularProgressIndicator();
-                              }),
-                          FutureBuilder<int>(
-                              future: totalhoursfunction(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<int> snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListTile(
-                                      tileColor: Colors.blue,
-                                      leading: Icon(Icons.bedtime),
-                                      title: Text("My Hours",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          )),
-                                      trailing: Text(snapshot.data.toString(),
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                          )));
-                                }
-                                return CircularProgressIndicator();
-                              }),
-                          FutureBuilder<double>(
-                              future: totalhoursratefunction(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<double> snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListTile(
-                                      tileColor: Colors.blue,
-                                      leading: Icon(Icons.bedtime),
-                                      title: Text("My Rate Hours",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          )),
-                                      trailing: Text(snapshot.data.toString(),
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                          )));
-                                }
-                                return CircularProgressIndicator();
-                              }),
-                          FutureBuilder<double>(
-                              future: totalratingratefunction(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<double> snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListTile(
-                                      tileColor: Colors.blue,
-                                      leading: Icon(Icons.bedtime),
-                                      title: Text("My Rate Ratings",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          )),
-                                      trailing: Text(snapshot.data.toString(),
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                          )));
-                                }
-                                return CircularProgressIndicator();
-                              }),
-                          SingleChildScrollView(
-                            child: StreamBuilder<QuerySnapshot>(
+      body: RefreshIndicator(
+          onRefresh: refreshData,
+          child: Stack(children: [
+          Container(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Card(
+                    margin: EdgeInsets.all(18),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text(
+                              name ?? '',
+                              style: TextStyle(
+                                  fontSize: 32, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              email ?? '',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Data Information",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            FutureBuilder<int>(
+                                future: totalfunction(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<int> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListTile(
+                                        tileColor: Colors.blue,
+                                        leading: Icon(Icons.bedtime),
+                                        title: Text("My Sleep",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            )),
+                                        trailing: Text(snapshot.data.toString(),
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                            )));
+                                  }
+                                  return CircularProgressIndicator();
+                                }),
+                            FutureBuilder<int>(
+                                future: totalhoursfunction(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<int> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListTile(
+                                        tileColor: Colors.blue,
+                                        leading: Icon(Icons.bedtime),
+                                        title: Text("My Hours",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            )),
+                                        trailing: Text(snapshot.data.toString().substring(0, 1),
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                            )));
+                                  }
+                                  return CircularProgressIndicator();
+                                }),
+                            FutureBuilder<double>(
+                                future: totalhoursratefunction(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<double> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListTile(
+                                        tileColor: Colors.blue,
+                                        leading: Icon(Icons.bedtime),
+                                        title: Text("My Rate Hours",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            )),
+                                        trailing: Text(snapshot.data.toString().substring(0, 1),
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                            )));
+                                  }
+                                  return CircularProgressIndicator();
+                                }),
+                            FutureBuilder<double>(
+                                future: totalratingratefunction(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<double> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListTile(
+                                        tileColor: Colors.blue,
+                                        leading: Icon(Icons.bedtime),
+                                        title: Text("My Rate Ratings",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            )),
+                                        trailing: Text(snapshot.data.toString().substring(0, 1),
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                            )));
+                                  }
+                                  return CircularProgressIndicator();
+                                }),
+                                Text(
+                              "Hours Charts",
+                              style: TextStyle(
+                                  fontSize: 32, fontWeight: FontWeight.bold),
+                              ),
+                            StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('timer')
                                     .where("username", isEqualTo: name)
@@ -262,75 +249,77 @@ class _AccountPageState extends State<AccountPage> {
                                     return buildChart(context, sleeptimer);
                                   }
                                 }),
-                          ),
-                        ],
+
+                              
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Confirmation"),
-                            content: Text("Are you sure you want to sign out?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  await AuthServices.signout().then((value) {
-                                    if (value) {
-                                      Navigator.pushReplacement(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return SignInPage();
-                                      }));
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                    }
-                                  });
-                                },
-                                child: Text("Yes"),
-                              ),
-                              TextButton(
-                                child: Text("No"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                          );
-                        });
-                  },
-                  child: Text("Sign Out"),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Confirmation"),
+                              content: Text("Are you sure you want to sign out?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    await AuthServices.signout().then((value) {
+                                      if (value) {
+                                        Navigator.pushReplacement(context,
+                                            MaterialPageRoute(builder: (context) {
+                                          return SignInPage();
+                                        }));
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
+                                    });
+                                  },
+                                  child: Text("Yes"),
+                                ),
+                                TextButton(
+                                  child: Text("No"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              ],
+                            );
+                          });
+                    },
+                    child: Text("Sign Out"),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        isLoading == true
-            ? Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.transparent,
-                child: SpinKitFadingCircle(
-                  size: 50,
-                  color: Colors.blue,
-                ),
-              )
-            : Container()
-      ]),
+          isLoading == true
+              ? Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.transparent,
+                  child: SpinKitFadingCircle(
+                    size: 50,
+                    color: Colors.blue,
+                  ),
+                )
+              : Container()
+        ]),
+      ),
     );
   }
 
@@ -357,33 +346,10 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget buildChart2(BuildContext context, List<RatingChart> ratingtimer){
-    ratingdata = ratingtimer;
-    _generateData2(ratingdata);
-    return Container(
-      height: 400,
-      width: 200,
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: charts.PieChart(
-                _seriesPieData,
-                animate: true,
-                animationDuration: Duration(seconds: 2),
-                defaultRenderer: new charts.ArcRendererConfig(
-                  arcWidth: 100,
-                  arcRendererDecorators: [
-                          new charts.ArcLabelDecorator(
-                              labelPosition: charts.ArcLabelPosition.inside)
-                        ]
-                ),
-              ),
-            ),
-          ]),
-    );
+  	
+    Future refreshData() async {
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {});
+    }
+
   }
-}
-
-
-
