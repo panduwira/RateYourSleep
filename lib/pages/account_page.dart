@@ -73,7 +73,7 @@ class _AccountPageState extends State<AccountPage> {
     });
     return totalhours.toDouble();
   }
-
+  /*
   Future<double> totalratingratefunction() async {
     double totalrating = 0;
     QuerySnapshot<Map<String, dynamic>> productSnapshot =
@@ -82,10 +82,15 @@ class _AccountPageState extends State<AccountPage> {
             .where("username", isEqualTo: name)
             .get();
     productSnapshot.docs.forEach((doc) {
-      totalrating = totalrating + double.parse((doc.data()['rating']));
+      double ratingparse = double.parse((doc.data()['rating']));
+      if (ratingparse == "null"){
+        ratingparse = 0;
+      }
+      totalrating = totalrating + ratingparse;
     });
     return totalrating.toDouble() / productSnapshot.docs.length;
   }
+  */
 
   Future chooseImage() async {
     final selectedImage = await imagePicker.getImage(
@@ -208,6 +213,7 @@ class _AccountPageState extends State<AccountPage> {
                                   }
                                   return CircularProgressIndicator();
                                 }),
+                              /*
                             FutureBuilder<double>(
                                 future: totalratingratefunction(),
                                 builder: (BuildContext context,
@@ -227,6 +233,7 @@ class _AccountPageState extends State<AccountPage> {
                                   }
                                   return CircularProgressIndicator();
                                 }),
+                                */
                                 Text(
                               "Hours Charts",
                               style: TextStyle(

@@ -25,6 +25,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 part 'signin_page.dart';
 part 'signup_page.dart';
+part 'signinup.dart';
 part 'home.dart';
 part 'mainmenu.dart';
 part 'mainpage.dart';
