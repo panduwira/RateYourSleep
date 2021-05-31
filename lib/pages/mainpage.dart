@@ -11,7 +11,10 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(title: Text("Rate Your Sleep"), centerTitle: true, leading: Container()),
+      appBar: AppBar(
+          title: Text("Rate Your Sleep"),
+          centerTitle: true,
+          leading: Container()),
     );
   }
 }

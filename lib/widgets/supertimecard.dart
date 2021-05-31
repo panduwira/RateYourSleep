@@ -1,8 +1,8 @@
 part of 'widgets.dart';
 
-class TimeDataCard extends StatelessWidget {
+class SuperTimeDataCard extends StatelessWidget {
   final SleepTimer sleeptimer;
-  const TimeDataCard({this.sleeptimer});
+  const SuperTimeDataCard({this.sleeptimer});
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +12,15 @@ class TimeDataCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(15)),
         child: ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           isThreeLine: true,
           onTap: () async {
             await showDialog(
                 context: context,
                 builder: (_) => new AlertDialog(
-                      title: Text(sleeptimer.sleepdate),
+                      title: Text("Last Session : " + sleeptimer.sleepdate),
                       content: Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -26,17 +29,17 @@ class TimeDataCard extends StatelessWidget {
                           children: <Widget>[
                             Container(
                               child: ListTile(
-                              title: Text('Start Time '),
+                              title: Text('Start Time'),
                               trailing: Text(sleeptimer.sleepdate),
                             )),
                             Container(
-                              child: ListTile(
-                              title: Text('End Time '),
+                                child: ListTile(
+                              title: Text('End Time'),
                               trailing: Text(sleeptimer.wakeupdate),
                             )),
                             Container(
                               child: ListTile(
-                              title: Text('Length '),
+                              title: Text('Length'),
                               trailing: Text(sleeptimer.hours.toString() +
                                   ":" +
                                   sleeptimer.minutes.toString() +
@@ -51,33 +54,20 @@ class TimeDataCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      actions: <Widget>[
-                        TextButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              bool result =
-                                  await SleepTimerServices.deleteProduct(
-                                      sleeptimer.id);
-                              if (result == true) {
-                                Fluttertoast.showToast(
-                                    msg: "Data deleted",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER_RIGHT,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.yellow,
-                                    fontSize: 16.0);
-                              }
-                            },
-                            child: Text('Delete', style: TextStyle(color: Colors.redAccent),)),
-                      ],
                     ));
           },
-          title: Text(sleeptimer.sleeptime, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-          subtitle: Text(sleeptimer.rating, style: TextStyle(fontSize: 20),),
+          title: Text(
+            sleeptimer.sleeptime,
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            sleeptimer.rating,
+            style: TextStyle(fontSize: 20),
+          ),
           leading: Icon(
             Icons.star,
-            color: Colors.amber,
-            size: 32,
+            color: Colors.yellow,
+            size: 36,
           ),
           trailing: Text(sleeptimer.sleepdate + "\n\n" + sleeptimer.wakeupdate),
         ),

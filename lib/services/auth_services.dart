@@ -4,13 +4,13 @@ class AuthServices {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static Reference ref;
   static UploadTask uploadTask;
-  static final firestore = FirebaseFirestore.instance; 
+  static final firestore = FirebaseFirestore.instance;
   final CollectionReference users = firestore.collection('user');
 
   static Future<String> signUp(
       String email, String password, String name) async {
     await Firebase.initializeApp();
-    String msg = "Signed up successfully";
+    String msg = "Signed up Signed infully";
     try {
       UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -34,7 +34,7 @@ class AuthServices {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .whenComplete(
-            () => msg = "success",
+            () => msg = "Signed in",
           );
     } catch (e) {
       msg = e.toString();

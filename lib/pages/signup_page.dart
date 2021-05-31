@@ -6,9 +6,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final ctrlFullName = TextEditingController();
   final ctrlName = TextEditingController();
   final ctrlEmail = TextEditingController();
   final ctrlPassword = TextEditingController();
+  String dropdownValue = '-';
   bool isLoading = false;
 
   @override
@@ -20,6 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void clearForm() {
+    ctrlFullName.clear();
     ctrlName.clear();
     ctrlEmail.clear();
     ctrlPassword.clear();
@@ -29,10 +32,10 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-            brightness: Brightness.light, primaryColor: Colors.red[600]),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark, primaryColor: Colors.red[400]),
-        themeMode: ThemeMode.system,
+          brightness: Brightness.light, primaryColor: Colors.blue[600]),
+      darkTheme: ThemeData(
+          brightness: Brightness.dark, primaryColor: Colors.blue[400]),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -43,61 +46,84 @@ class _SignUpPageState extends State<SignUpPage> {
             margin: EdgeInsets.all(18),
             child: ListView(
               children: <Widget>[
+                Text(
+                  "Welcome to rateyoursleep",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 36),
+                ),
+                Text(
+                  "Improve your sleep for better future",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 25),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: ctrlFullName,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          labelText: 'Full Name',
+                          hintText: "Write your full name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
+                    ),
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: ctrlName,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.account_circle),
                           labelText: 'Name',
                           hintText: "Write your name",
-                          border: OutlineInputBorder()),
-                      
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
                     ),
                     SizedBox(height: 10),
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       controller: ctrlEmail,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.email),
                           labelText: 'Email',
                           hintText: "Write your email",
-                          border: OutlineInputBorder()),
-                      validator: (String value){
-                      if(value.isEmpty)
-                      {
-                        return 'Please a Enter';
-                      }
-                      if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)){
-                        return 'Please a valid Email';
-                      }
-                      return null;
-                    }, 
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                            .hasMatch(value)) {
+                          return 'Please a valid Email';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10),
                     TextFormField(
                       controller: ctrlPassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.vpn_key),
                           labelText: 'Password',
-                          border: OutlineInputBorder()),
-                      validator: (String value){
-                      if(value.isEmpty)
-                      {
-                        return 'Please a Enter Password';
-                      }
-                      return null;
-                    },
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please a Enter Password';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 40),
-                    RaisedButton.icon(
+                    ElevatedButton.icon(
                       icon: Icon(Icons.cloud_upload),
                       label: Text("Sign Up"),
-                      textColor: Colors.white,
-                      color: Colors.blueAccent,
                       onPressed: () async {
                         if (ctrlName.text == "" ||
                             ctrlEmail.text == "" ||
@@ -128,11 +154,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             setState(() {
                               isLoading = false;
                               clearForm();
-                            });
-                            Navigator.pushReplacement(context,
+                              Navigator.pushReplacement(context,
                                   MaterialPageRoute(builder: (context) {
                                 return SignInPage();
                               }));
+                            });
                           } else {
                             Fluttertoast.showToast(
                               msg: result,

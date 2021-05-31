@@ -23,9 +23,9 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          brightness: Brightness.light, primaryColor: Colors.red[600]),
-      darkTheme:
-          ThemeData(brightness: Brightness.dark, primaryColor: Colors.red[400]),
+          brightness: Brightness.light, primaryColor: Colors.blue[400]),
+      darkTheme: ThemeData(
+          brightness: Brightness.dark, primaryColor: Colors.blue[600]),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -37,6 +37,16 @@ class _SignInPageState extends State<SignInPage> {
             margin: EdgeInsets.all(18),
             child: ListView(
               children: <Widget>[
+                Text(
+                  "Welcome to rateyoursleep",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 36),
+                ),
+                Text(
+                  "Improve your sleep for better future",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -45,26 +55,26 @@ class _SignInPageState extends State<SignInPage> {
                       keyboardType: TextInputType.emailAddress,
                       controller: ctrlEmail,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.mail),
                           labelText: 'Email',
                           hintText: "Write your email",
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
                     ),
                     SizedBox(height: 10),
                     TextFormField(
                       controller: ctrlPassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.vpn_key),
                           labelText: 'Password',
-                          border: OutlineInputBorder()),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
                     ),
                     SizedBox(height: 40),
-                    RaisedButton.icon(
+                    ElevatedButton.icon(
                       icon: Icon(Icons.cloud_upload),
                       label: Text("Sign In"),
-                      textColor: Colors.white,
-                      color: Colors.blueAccent,
                       onPressed: () async {
                         if (ctrlEmail.text == "" || ctrlPassword.text == "") {
                           Fluttertoast.showToast(
@@ -81,9 +91,9 @@ class _SignInPageState extends State<SignInPage> {
                           });
                           String result = await AuthServices.signIn(
                               ctrlEmail.text, ctrlPassword.text);
-                          if (result == "success") {
+                          if (result == "Signed in") {
                             Fluttertoast.showToast(
-                              msg: "Success",
+                              msg: "Signed in",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               backgroundColor: Colors.green,
